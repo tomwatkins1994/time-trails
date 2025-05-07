@@ -1,7 +1,11 @@
-export interface NTLink {
-    rel: string;
-    href: string;
-    description: string | null;
-    caption: string | null;
-    credit: string | null;
-}
+import { z } from "zod";
+
+export const NTLinkSchema = z.object({
+    rel: z.string(),
+    href: z.string(),
+    description: z.string().nullable(),
+    caption: z.string().nullable(),
+    credit: z.string().nullable(),
+});
+
+export type NTLink = z.infer<typeof NTLinkSchema>;
