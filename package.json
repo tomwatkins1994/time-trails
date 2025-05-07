@@ -2,13 +2,13 @@
   "name": "time-trails",
   "version": "1.0.0",
   "description": "",
+  "author": "Tom Watkins",
+  "license": "ISC",
+  "keywords": [],
   "main": "index.js",
   "scripts": {
     "test": "vitest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "packageManager": "pnpm@10.9.0",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
