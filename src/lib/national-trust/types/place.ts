@@ -8,8 +8,8 @@ export const NTPlaceSchema = z.object({
   type: z.literal("PLACE"),
   title: z.string(),
   description: z.string(),
-  town: z.string(),
-  county: z.string(),
+  town: z.string().optional(),
+  county: z.string().optional(),
   links: z.array(z.union([z.object({ imageLink: NTLinkSchema }), z.object({ link: NTLinkSchema })])),
   location: z.object({
     lat: z.number(),
@@ -21,12 +21,12 @@ export const NTPlaceSchema = z.object({
     date: z.string(),
     openingTimeStatus: z.string(),
   })).optional(),
-  publicationChannels: z.array(z.string()),
+  publicationChannels: z.string().array().optional(),
   cmsRegion: z.string(),
   websiteUrl: z.string(),
   imageUrl: z.string(),
   imageDescription: z.string(),
-  subTitle: z.string(),
+  subTitle: z.string().optional(),
 });
 
 export type NTPlace = z.infer<typeof NTPlaceSchema>;
