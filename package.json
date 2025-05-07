@@ -1,5 +1,6 @@
 {
   "name": "time-trails",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "author": "Tom Watkins",
@@ -7,6 +8,9 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "biome lint ./src",
