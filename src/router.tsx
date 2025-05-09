@@ -2,7 +2,6 @@ import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { routerWithQueryClient } from "@tanstack/react-router-with-query";
 import * as TanstackQuery from "./providers/query-client-provider";
 import { routeTree } from "./routeTree.gen";
-import { QueryClient } from "@tanstack/react-query";
 
 export function createRouter() {
 	const queryContext = TanstackQuery.getContext();
