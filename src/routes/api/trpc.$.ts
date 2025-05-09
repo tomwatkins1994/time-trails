@@ -3,7 +3,6 @@ import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { trpcRouter } from "../../trpc/router";
 
 function handler({ request }: { request: Request }) {
-	console.log("hello");
 	return fetchRequestHandler({
 		req: request,
 		router: trpcRouter,
