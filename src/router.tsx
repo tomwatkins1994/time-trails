@@ -11,6 +11,9 @@ export function createRouter() {
 		context: {
 			...queryContext,
 		},
+		defaultPreload: "intent",
+		// defaultErrorComponent: DefaultCatchBoundary,
+		// defaultNotFoundComponent: () => <NotFound />,
 		scrollRestoration: true,
 		defaultPreloadStaleTime: 0,
 		Wrap: (props: { children: React.ReactNode }) => {
