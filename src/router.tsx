@@ -9,6 +9,15 @@ import { routeTree } from "./routeTree.gen";
 import type { TRPCRouter } from "./trpc/router";
 import { TRPCProvider } from "./trpc/react";
 
+function getUrl() {
+	const base = (() => {
+		if (typeof window !== "undefined") return "";
+		if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+		return `http://localhost:${process.env.PORT ?? 3000}`;
+	})();
+	return `${base}/api/trpc`;
+}
+
 export function createRouter() {
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -16,14 +25,6 @@ export function createRouter() {
 			hydrate: { deserializeData: superjson.deserialize },
 		},
 	});
-
-	function getUrl() {
-		const base = (() => {
-			if (typeof window !== "undefined") return "";
-			return `http://localhost:${process.env.PORT ?? 3000}`;
-		})();
-		return `${base}/api/trpc`;
-	}
 
 	const trpcClient = createTRPCClient<TRPCRouter>({
 		links: [
