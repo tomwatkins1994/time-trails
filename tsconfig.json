@@ -13,6 +13,10 @@
         "moduleDetection": "force",
         "isolatedModules": true,
         "verbatimModuleSyntax": false,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./app/*"]
+        },
 
         /* Strictness */
         "strict": true,
