@@ -15,7 +15,7 @@
         "verbatimModuleSyntax": false,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["./app/*"]
+            "@/*": ["./src/*"]
         },
 
         /* Strictness */
