@@ -1,6 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTRPC } from "../trpc/react";
 import { useQuery } from "@tanstack/react-query";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -21,9 +28,14 @@ function Home() {
 
 	return (
 		<>
-			<h1 className="text-3xl font-bold underline">Hello world!</h1>
 			{places?.map((place) => (
-				<div key={place.id}>{place.name}</div>
+				<Card key={place.id}>
+					<CardHeader>
+						<CardTitle>{place.name}</CardTitle>
+						<CardDescription>{place.description}</CardDescription>
+					</CardHeader>
+					<CardContent>hello</CardContent>
+				</Card>
 			))}
 		</>
 	);

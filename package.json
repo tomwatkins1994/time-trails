@@ -18,7 +18,8 @@
     "format": "biome format --write ./src",
     "check-format": "biome format ./src",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate"
+    "db:migrate": "drizzle-kit migrate",
+    "ui:add": "pnpm dlx shadcn@canary add"
   },
   "packageManager": "pnpm@10.9.0",
   "devDependencies": {
@@ -43,12 +44,14 @@
     "@trpc/client": "^11.1.2",
     "@trpc/server": "^11.1.2",
     "@trpc/tanstack-react-query": "^11.1.2",
+    "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "pg": "^8.15.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "superjson": "^2.2.2",
+    "tailwind-merge": "^3.2.0",
     "tailwindcss": "^4.1.6",
     "vinxi": "^0.5.6",
     "zod": "^3.24.4"
