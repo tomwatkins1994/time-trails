@@ -9,7 +9,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { TRPCRouter } from "../trpc/router";
 
-import appCss from "../styles.css?url";
+import appCss from "@/styles/app.css?url";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
