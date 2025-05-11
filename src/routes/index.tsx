@@ -30,6 +30,7 @@ function Home() {
 					title={place.name}
 					subTitle={`${place.town}, ${place.county}`}
 					description={place.description}
+					managedBy={place.managedBy}
 				/>
 			))}
 		</CardLayoutGrid>
