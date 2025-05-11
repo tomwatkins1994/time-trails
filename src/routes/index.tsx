@@ -1,13 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTRPC } from "../trpc/react";
 import { useQuery } from "@tanstack/react-query";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
+import { PhotoCard } from "@/components/photo-card";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -29,13 +23,13 @@ function Home() {
 	return (
 		<>
 			{places?.map((place) => (
-				<Card key={place.id}>
-					<CardHeader>
-						<CardTitle>{place.name}</CardTitle>
-						<CardDescription>{place.description}</CardDescription>
-					</CardHeader>
-					<CardContent>hello</CardContent>
-				</Card>
+				<PhotoCard
+					key={place.id}
+					imageUrl={place.imageUrl}
+					title={place.name}
+					subTitle={`${place.town}, ${place.county}`}
+					description={place.description}
+				/>
 			))}
 		</>
 	);
