@@ -1,7 +1,7 @@
-import { db } from "@/db";
-import { getPlaces } from "./get-places";
-import { places } from "@/db/schema/places";
 import { sql } from "drizzle-orm";
+import { db } from "@/db";
+import { places } from "@/db/schema/places";
+import { getPlaces } from "./get-places";
 
 export async function upsertPlaces() {
 	const ntPlaces = (await getPlaces()).multiMatch.results.map((place) => ({
