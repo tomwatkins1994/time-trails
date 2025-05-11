@@ -28,7 +28,7 @@ function Home() {
 					key={place.id}
 					imageUrl={place.imageUrl}
 					title={place.name}
-					subTitle={`${place.town}, ${place.county}`}
+					subTitle={[place.town, place.county].filter(Boolean).join(", ")}
 					description={place.description}
 					managedBy={place.managedBy}
 				/>
