@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
-import { nationalTrustMockServer } from "../../mocks/national-trust/server";
+import { nationalTrustMockServer } from "../../../test/mocks/national-trust/server";
 
 describe("getPlaces", () => {
 	beforeAll(() => {

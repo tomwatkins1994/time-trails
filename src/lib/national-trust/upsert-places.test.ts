@@ -1,6 +1,6 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
 import { upsertPlaces } from "./upsert-places";
-import { nationalTrustMockServer } from "@/mocks/national-trust/server";
+import { nationalTrustMockServer } from "test/mocks/national-trust/server";
 import { db } from "@/db";
 import { places } from "@/db/schema";
 
