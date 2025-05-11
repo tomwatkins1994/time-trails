@@ -21,12 +21,12 @@ export async function upsertPlaces() {
 		.onConflictDoUpdate({
 			target: [places.managedBy, places.managerId],
 			set: {
-				name: sql`exlucded.name`,
-				description: sql`exlucded.description`,
-				town: sql`exlucded.town`,
-				county: sql`exlucded.county`,
-				imageUrl: sql`exlucded.imageUrl`,
-				managerWebsiteUrl: sql`exlucded.websiteUrl`,
+				name: sql`excluded.name`,
+				description: sql`excluded.description`,
+				town: sql`excluded.town`,
+				county: sql`excluded.county`,
+				imageUrl: sql`excluded.image_url`,
+				managerWebsiteUrl: sql`excluded.manager_website_url`,
 			},
 		});
 }
