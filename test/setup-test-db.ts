@@ -1,5 +1,5 @@
+import { setupDb } from "@/db";
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "node:path";
 import { afterAll, beforeAll, vi } from "vitest";
@@ -18,7 +18,7 @@ const container = await new PostgreSqlContainer()
 	.start();
 
 const connectionString = `postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${container.getHost()}:${container.getFirstMappedPort()}/${POSTGRES_DB}`;
-const db = drizzle(connectionString);
+const db = setupDb(connectionString);
 
 vi.doMock("@/db", async (importOriginal) => {
 	return {
