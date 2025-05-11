@@ -1,0 +1,1 @@
+ALTER TABLE "places" ADD CONSTRAINT "places_managedBy_managerId_unique" UNIQUE NULLS NOT DISTINCT("managed_by","manager_id");
