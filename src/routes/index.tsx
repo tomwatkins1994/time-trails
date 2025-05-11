@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useTRPC } from "../trpc/react";
 import { useQuery } from "@tanstack/react-query";
 import { PhotoCard } from "@/components/photo-card";
+import { CardLayoutGrid } from "@/components/card-layout-grid";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -21,7 +22,7 @@ function Home() {
 	}
 
 	return (
-		<>
+		<CardLayoutGrid>
 			{places?.map((place) => (
 				<PhotoCard
 					key={place.id}
@@ -31,6 +32,6 @@ function Home() {
 					description={place.description}
 				/>
 			))}
-		</>
+		</CardLayoutGrid>
 	);
 }
