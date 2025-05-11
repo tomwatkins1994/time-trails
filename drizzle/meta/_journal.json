@@ -15,6 +15,13 @@
       "when": 1746749754602,
       "tag": "0001_brief_wallop",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1746922757779,
+      "tag": "0002_slippery_shinobi_shaw",
+      "breakpoints": true
     }
   ]
 }
