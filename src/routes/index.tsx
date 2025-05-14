@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
-import { useEffect } from "react";
 
 import { useTRPC } from "../trpc/react";
 import { PhotoCard } from "@/components/photo-card";
@@ -16,23 +15,23 @@ export const Route = createFileRoute("/")({
 	loaderDeps: ({ search }) => ({
 		pages: search.pages,
 	}),
-	loader: async ({ context }) => {
-		await context.queryClient.prefetchInfiniteQuery(
-			context.trpc.places.infiniteList.infiniteQueryOptions({
+	loader: async ({ context, deps }) => {
+		await context.queryClient.prefetchInfiniteQuery({
+			...context.trpc.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
 			}),
-		);
+			pages: deps.pages,
+			getNextPageParam: (lastPage) => lastPage.nextCursor,
+		});
 	},
 });
 
 function Home() {
 	const trpc = useTRPC();
 	const navigate = Route.useNavigate();
-	const { pages } = Route.useLoaderDeps();
 	const {
 		data: places,
 		isLoading,
-		isFetchingNextPage,
 		fetchNextPage,
 		hasNextPage,
 	} = useInfiniteQuery(
@@ -43,21 +42,6 @@ function Home() {
 			},
 		),
 	);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: We only want this on component mount
-	useEffect(() => {
-		if (isFetchingNextPage) return;
-		if ((places?.pages.length ?? 0) === pages) return;
-
-		const preloadPages = async () => {
-			for (let i = 1; i < pages; i++) {
-				const result = await fetchNextPage();
-				if (!result.hasNextPage) break;
-			}
-		};
-
-		preloadPages();
-	}, []);
 
 	if (isLoading) {
 		return "Loading...";
