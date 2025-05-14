@@ -47,6 +47,7 @@ function Home() {
 	// biome-ignore lint/correctness/useExhaustiveDependencies: We only want this on component mount
 	useEffect(() => {
 		if (isFetchingNextPage) return;
+		if ((places?.pages.length ?? 0) === pages) return;
 
 		const preloadPages = async () => {
 			for (let i = 1; i < pages; i++) {
