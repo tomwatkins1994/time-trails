@@ -28,13 +28,15 @@ export function PhotoCard(props: PhotoCardProps) {
 						<CardTitle>{props.title}</CardTitle>
 						<CardDescription>{props.subTitle}</CardDescription>
 					</div>
-					{props.managedBy === "NATIONAL_TRUST" && props.managerWebsiteUrl ? (
+					{props.managedBy && props.managerWebsiteUrl ? (
 						<a
 							href={props.managerWebsiteUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 						>
-							<img src={ntIcon} alt="Go to website" className="size-10" />
+							{props.managedBy === "NATIONAL_TRUST" ? (
+								<img src={ntIcon} alt="Go to website" className="size-10" />
+							) : null}
 						</a>
 					) : null}
 				</div>
