@@ -1,10 +1,12 @@
-import { createFileRoute, Router } from "@tanstack/react-router";
-import { useTRPC } from "../trpc/react";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { PhotoCard } from "@/components/photo-card";
-import { CardLayoutGrid } from "@/components/card-layout-grid";
+import { createFileRoute } from "@tanstack/react-router";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useEffect } from "react";
+
+import { useTRPC } from "../trpc/react";
+import { PhotoCard } from "@/components/photo-card";
+import { CardLayoutGrid } from "@/components/card-layout-grid";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -14,7 +16,7 @@ export const Route = createFileRoute("/")({
 	loaderDeps: ({ search }) => ({
 		pages: search.pages,
 	}),
-	loader: async ({ context, deps }) => {
+	loader: async ({ context }) => {
 		await context.queryClient.prefetchInfiniteQuery(
 			context.trpc.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
@@ -77,19 +79,21 @@ function Home() {
 				)}
 			</CardLayoutGrid>
 			{hasNextPage ? (
-				<button
-					type="button"
-					onClick={async () => {
-						await fetchNextPage();
-						navigate({
-							from: Route.fullPath,
-							search: () => ({ pages: (places?.pages.length ?? 0) + 1 }),
-							resetScroll: false,
-						});
-					}}
-				>
-					Fetch next page
-				</button>
+				<div className="w-full flex justify-center py-2">
+					<Button
+						type="button"
+						onClick={async () => {
+							await fetchNextPage();
+							navigate({
+								from: Route.fullPath,
+								search: () => ({ pages: (places?.pages.length ?? 0) + 1 }),
+								resetScroll: false,
+							});
+						}}
+					>
+						Load More
+					</Button>
+				</div>
 			) : null}
 		</>
 	);
