@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
-import { useTRPC } from "../trpc/react";
+import { useTRPC } from "@/trpc/react";
 import { PhotoCard } from "@/components/photo-card";
 import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,7 @@ function Home() {
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
+		isFetchingNextPage,
 	} = useInfiniteQuery(
 		trpc.places.infiniteList.infiniteQueryOptions(
 			{ cursor: null },
@@ -67,6 +68,7 @@ function Home() {
 				<div className="w-full flex justify-center py-2">
 					<Button
 						type="button"
+						disabled={isFetchingNextPage}
 						onClick={async () => {
 							await fetchNextPage();
 							navigate({
