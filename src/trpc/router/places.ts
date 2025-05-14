@@ -7,12 +7,12 @@ export const placesRouter = {
 		.input(
 			z.object({
 				cursor: z.string().nullable(),
-				limit: z.number().default(10),
+				limit: z.number().default(12),
 			}),
 		)
 		.query(async ({ input: { cursor, limit } }) => {
 			const places = await db.query.places.findMany({
-				where: (t, { gt }) => (cursor ? gt(t.id, cursor) : undefined),
+				where: (t, { gte }) => (cursor ? gte(t.id, cursor) : undefined),
 				orderBy: (t, { asc }) => asc(t.id),
 				limit: limit + 1,
 			});
