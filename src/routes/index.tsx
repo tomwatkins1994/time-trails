@@ -4,19 +4,20 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { PhotoCard } from "@/components/photo-card";
 import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { z } from "zod";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
 	component: Home,
 	validateSearch: z.object({
-		cursor: z.string().optional(),
+		pages: z.number().optional().default(1),
 	}),
 	loaderDeps: ({ search }) => ({
-		cursor: search.cursor,
+		pages: search.pages,
 	}),
 	loader: async ({ context, deps }) => {
 		await context.queryClient.prefetchInfiniteQuery(
 			context.trpc.places.infiniteList.infiniteQueryOptions({
-				cursor: deps.cursor ?? null,
+				cursor: null,
 			}),
 		);
 	},
@@ -24,20 +25,36 @@ export const Route = createFileRoute("/")({
 
 function Home() {
 	const trpc = useTRPC();
-	const { cursor } = Route.useLoaderDeps();
+	const navigate = Route.useNavigate();
+	const { pages } = Route.useLoaderDeps();
 	const {
 		data: places,
 		isLoading,
+		isFetchingNextPage,
 		fetchNextPage,
 		hasNextPage,
 	} = useInfiniteQuery(
 		trpc.places.infiniteList.infiniteQueryOptions(
-			{ cursor: cursor ?? null },
+			{ cursor: null },
 			{
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
 			},
 		),
 	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We only want this on component mount
+	useEffect(() => {
+		if (isFetchingNextPage) return;
+
+		const preloadPages = async () => {
+			for (let i = 1; i < pages; i++) {
+				const result = await fetchNextPage();
+				if (!result.hasNextPage) break;
+			}
+		};
+
+		preloadPages();
+	}, []);
 
 	if (isLoading) {
 		return "Loading...";
@@ -62,9 +79,13 @@ function Home() {
 			{hasNextPage ? (
 				<button
 					type="button"
-					onClick={() => {
-						console.log("Pressed");
-						fetchNextPage();
+					onClick={async () => {
+						await fetchNextPage();
+						navigate({
+							from: Route.fullPath,
+							search: () => ({ pages: (places?.pages.length ?? 0) + 1 }),
+							resetScroll: false,
+						});
 					}}
 				>
 					Fetch next page
