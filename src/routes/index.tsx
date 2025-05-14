@@ -61,6 +61,7 @@ function Home() {
 							subTitle={[place.town, place.county].filter(Boolean).join(", ")}
 							description={place.description}
 							managedBy={place.managedBy}
+							managerWebsiteUrl={place.managerWebsiteUrl}
 						/>
 					)),
 				)}

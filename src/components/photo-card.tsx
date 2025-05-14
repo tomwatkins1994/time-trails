@@ -13,6 +13,7 @@ export interface PhotoCardProps {
 	subTitle: string;
 	description: string;
 	managedBy?: string | null;
+	managerWebsiteUrl?: string | null;
 }
 
 export function PhotoCard(props: PhotoCardProps) {
@@ -27,8 +28,14 @@ export function PhotoCard(props: PhotoCardProps) {
 						<CardTitle>{props.title}</CardTitle>
 						<CardDescription>{props.subTitle}</CardDescription>
 					</div>
-					{props.managedBy === "NATIONAL_TRUST" ? (
-						<img src={ntIcon} alt="Go to website" className="size-10" />
+					{props.managedBy === "NATIONAL_TRUST" && props.managerWebsiteUrl ? (
+						<a
+							href={props.managerWebsiteUrl}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<img src={ntIcon} alt="Go to website" className="size-10" />
+						</a>
 					) : null}
 				</div>
 			</CardHeader>
