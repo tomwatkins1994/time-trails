@@ -6,6 +6,7 @@ import { useTRPC } from "@/trpc/react";
 import { PhotoCard } from "@/components/photo-card";
 import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
+import { CircleLoader } from "@/components/loaders/circle-loader";
 
 export const Route = createFileRoute("/")({
 	component: Home,
@@ -64,8 +65,9 @@ function Home() {
 					)),
 				)}
 			</CardLayoutGrid>
-			{hasNextPage ? (
-				<div className="w-full flex justify-center py-2">
+			<div className="w-full flex justify-center py-2">
+				{isFetchingNextPage ? <CircleLoader /> : null}
+				{hasNextPage && !isFetchingNextPage ? (
 					<Button
 						type="button"
 						disabled={isFetchingNextPage}
@@ -81,8 +83,8 @@ function Home() {
 					>
 						Load More
 					</Button>
-				</div>
-			) : null}
+				) : null}
+			</div>
 		</>
 	);
 }
