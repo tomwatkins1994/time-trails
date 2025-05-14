@@ -75,6 +75,7 @@ function Home() {
 								from: Route.fullPath,
 								search: () => ({ pages: (places?.pages.length ?? 0) + 1 }),
 								resetScroll: false,
+								replace: true,
 							});
 						}}
 					>
