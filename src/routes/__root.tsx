@@ -36,6 +36,12 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 				rel: "stylesheet",
 				href: appCss,
 			},
+			{ rel: "preconnect", href: "https://fonts.googleapis.com" },
+			{ rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "" },
+			{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&display=swap",
+			},
 		],
 	}),
 	component: RootComponent,
