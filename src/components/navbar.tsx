@@ -14,7 +14,7 @@ export function NavBar() {
 				<div>
 					<Link
 						to="/places"
-						className="text-muted-foreground font-medium font-[Cinzel]"
+						className="text-muted-foreground hover:text-foreground font-medium font-[Cinzel]"
 					>
 						PLACES
 					</Link>
