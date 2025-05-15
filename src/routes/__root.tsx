@@ -10,6 +10,7 @@ import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { TRPCRouter } from "../trpc/router";
 
 import appCss from "@/styles/app.css?url";
+import { NavBar } from "@/components/navbar";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -55,7 +56,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 				<HeadContent />
 			</head>
 			<body>
-				{children}
+				<header className="sticky top-0 border-b p-2 px-4 bg-background">
+					<NavBar />
+				</header>
+				<main>{children}</main>
 				<Scripts />
 			</body>
 		</html>
