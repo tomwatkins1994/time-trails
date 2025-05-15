@@ -56,7 +56,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 				<HeadContent />
 			</head>
 			<body>
-				<header className="sticky top-0 border-b p-2 px-4 md:px-8 bg-background">
+				<header className="sticky top-0 p-4 md:px-8 bg-background">
 					<NavBar />
 				</header>
 				<main className="p-4 md:px-8 md:py-6">{children}</main>
