@@ -18,13 +18,13 @@ export interface PhotoCardProps {
 
 export function PhotoCard(props: PhotoCardProps) {
 	return (
-		<Card className="pt-0">
+		<Card className="pt-0 ">
 			{props.imageUrl ? (
 				<img src={props.imageUrl} alt="TODO" className="w-full rounded-t-xl" />
 			) : null}
 			<CardHeader>
 				<div className="flex gap-2 justify-between">
-					<div>
+					<div className="font-[Cinzel]">
 						<CardTitle>{props.title}</CardTitle>
 						<CardDescription>{props.subTitle}</CardDescription>
 					</div>
