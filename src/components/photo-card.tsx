@@ -18,7 +18,7 @@ export interface PhotoCardProps {
 
 export function PhotoCard(props: PhotoCardProps) {
 	return (
-		<Card className="pt-0 ">
+		<Card className="pt-0 gap-4 pb-4">
 			{props.imageUrl ? (
 				<img src={props.imageUrl} alt="TODO" className="w-full rounded-t-xl" />
 			) : null}
@@ -41,7 +41,7 @@ export function PhotoCard(props: PhotoCardProps) {
 					) : null}
 				</div>
 			</CardHeader>
-			<CardContent className="text-muted-foreground">
+			<CardContent className="text-muted-foreground text-sm">
 				{props.description}
 			</CardContent>
 		</Card>
