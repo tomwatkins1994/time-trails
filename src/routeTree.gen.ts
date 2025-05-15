@@ -11,13 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as PlacesImport } from './routes/places'
 
 // Create/Update Routes
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const PlacesRoute = PlacesImport.update({
+  id: '/places',
+  path: '/places',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -25,11 +25,11 @@ const IndexRoute = IndexImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/places': {
+      id: '/places'
+      path: '/places'
+      fullPath: '/places'
+      preLoaderRoute: typeof PlacesImport
       parentRoute: typeof rootRoute
     }
   }
@@ -38,33 +38,33 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/places': typeof PlacesRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/places': typeof PlacesRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
+  '/places': typeof PlacesRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/places'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/places'
+  id: '__root__' | '/places'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  PlacesRoute: typeof PlacesRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  PlacesRoute: PlacesRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +77,11 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/places"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/places": {
+      "filePath": "places.tsx"
     }
   }
 }
