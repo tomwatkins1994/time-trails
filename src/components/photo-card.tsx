@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import ntIcon from "../assets/national-trust.png";
+import ntIcon from "@/assets/national-trust.png";
 
 export interface PhotoCardProps {
 	imageUrl: string | null;
