@@ -50,7 +50,7 @@ function Home() {
 	}
 
 	return (
-		<>
+		<div className="flex flex-col gap-4">
 			<CardLayoutGrid>
 				{places?.pages.map((page) =>
 					page.items.map((place) => (
@@ -66,9 +66,13 @@ function Home() {
 					)),
 				)}
 			</CardLayoutGrid>
-			<div className="w-full flex justify-center py-2">
-				{isFetchingNextPage ? <CircleLoader /> : null}
-				{hasNextPage && !isFetchingNextPage ? (
+			{isFetchingNextPage ? (
+				<div className="w-full flex justify-center">
+					<CircleLoader />
+				</div>
+			) : null}
+			{hasNextPage && !isFetchingNextPage ? (
+				<div className="w-full flex justify-center">
 					<Button
 						type="button"
 						disabled={isFetchingNextPage}
@@ -84,8 +88,8 @@ function Home() {
 					>
 						Load More
 					</Button>
-				) : null}
-			</div>
-		</>
+				</div>
+			) : null}
+		</div>
 	);
 }
