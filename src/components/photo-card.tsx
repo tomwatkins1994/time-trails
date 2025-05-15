@@ -41,7 +41,9 @@ export function PhotoCard(props: PhotoCardProps) {
 					) : null}
 				</div>
 			</CardHeader>
-			<CardContent>{props.description}</CardContent>
+			<CardContent className="text-muted-foreground">
+				{props.description}
+			</CardContent>
 		</Card>
 	);
 }
