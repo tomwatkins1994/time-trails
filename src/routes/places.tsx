@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 
@@ -54,15 +54,16 @@ function Home() {
 			<CardLayoutGrid>
 				{places?.pages.map((page) =>
 					page.items.map((place) => (
-						<PhotoCard
-							key={place.id}
-							imageUrl={place.imageUrl}
-							title={place.name}
-							subTitle={[place.town, place.county].filter(Boolean).join(", ")}
-							description={place.description}
-							managedBy={place.managedBy}
-							managerWebsiteUrl={place.managerWebsiteUrl}
-						/>
+						<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
+							<PhotoCard
+								imageUrl={place.imageUrl}
+								title={place.name}
+								subTitle={[place.town, place.county].filter(Boolean).join(", ")}
+								description={place.description}
+								managedBy={place.managedBy}
+								managerWebsiteUrl={place.managerWebsiteUrl}
+							/>
+						</Link>
 					)),
 				)}
 			</CardLayoutGrid>
