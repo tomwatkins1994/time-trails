@@ -6,8 +6,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import ntIcon from "@/assets/national-trust.png";
 import { cn } from "@/lib/utils";
+import { ManagedByWebsiteLink } from "./managed-by-website-link";
 
 export interface PhotoCardProps extends ComponentProps<"div"> {
 	imageUrl: string | null;
@@ -18,33 +18,36 @@ export interface PhotoCardProps extends ComponentProps<"div"> {
 	managerWebsiteUrl?: string | null;
 }
 
-export function PhotoCard(props: PhotoCardProps) {
+export function PhotoCard({
+	className,
+	imageUrl,
+	title,
+	subTitle,
+	description,
+	managedBy,
+	managerWebsiteUrl,
+}: PhotoCardProps) {
 	return (
-		<Card className={cn("pt-0 gap-4 pb-4", props.className)}>
-			{props.imageUrl ? (
-				<img src={props.imageUrl} alt="TODO" className="w-full rounded-t-xl" />
+		<Card className={cn("pt-0 gap-4 pb-4", className)}>
+			{imageUrl ? (
+				<img src={imageUrl} alt="TODO" className="w-full rounded-t-xl" />
 			) : null}
 			<CardHeader>
 				<div className="flex gap-2 justify-between">
 					<div className="font-[Cinzel]">
-						<CardTitle>{props.title}</CardTitle>
-						<CardDescription>{props.subTitle}</CardDescription>
+						<CardTitle>{title}</CardTitle>
+						<CardDescription>{subTitle}</CardDescription>
 					</div>
-					{props.managedBy && props.managerWebsiteUrl ? (
-						<a
-							href={props.managerWebsiteUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							{props.managedBy === "NATIONAL_TRUST" ? (
-								<img src={ntIcon} alt="Go to website" className="size-10" />
-							) : null}
-						</a>
+					{managedBy && managerWebsiteUrl ? (
+						<ManagedByWebsiteLink
+							managedBy={managedBy}
+							managerWebsiteUrl={managerWebsiteUrl}
+						/>
 					) : null}
 				</div>
 			</CardHeader>
 			<CardContent className="text-muted-foreground text-sm">
-				{props.description}
+				{description}
 			</CardContent>
 		</Card>
 	);
