@@ -56,6 +56,7 @@ function Home() {
 					page.items.map((place) => (
 						<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
 							<PhotoCard
+								className="h-full"
 								imageUrl={place.imageUrl}
 								title={place.name}
 								subTitle={[place.town, place.county].filter(Boolean).join(", ")}

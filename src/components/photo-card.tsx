@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import {
 	Card,
 	CardContent,
@@ -6,8 +7,9 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import ntIcon from "@/assets/national-trust.png";
+import { cn } from "@/lib/utils";
 
-export interface PhotoCardProps {
+export interface PhotoCardProps extends ComponentProps<"div"> {
 	imageUrl: string | null;
 	title: string;
 	subTitle: string;
@@ -18,7 +20,7 @@ export interface PhotoCardProps {
 
 export function PhotoCard(props: PhotoCardProps) {
 	return (
-		<Card className="pt-0 gap-4 pb-4">
+		<Card className={cn("pt-0 gap-4 pb-4", props.className)}>
 			{props.imageUrl ? (
 				<img src={props.imageUrl} alt="TODO" className="w-full rounded-t-xl" />
 			) : null}
