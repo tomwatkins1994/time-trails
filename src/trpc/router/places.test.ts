@@ -20,7 +20,7 @@ describe("infiniteList", () => {
 			cursor: null,
 			limit,
 		});
-		expect(items.length).toBe(limit);
+		expect(items).toHaveLength(limit);
 		expect(nextCursor).toBeTruthy();
 	});
 
@@ -31,7 +31,7 @@ describe("infiniteList", () => {
 				cursor,
 				limit,
 			});
-			expect(items.length).toBe(limit);
+			expect(items).toHaveLength(limit);
 			if (i > 1) {
 				expect(items[0]?.id).toBe(cursor);
 			}
