@@ -4,15 +4,7 @@ import path from "node:path";
 import { afterAll, beforeAll, vi } from "vitest";
 import { setupDb } from "@/db";
 
-const container = await new PostgreSqlContainer()
-	.withEnvironment({
-		POSTGRES_USER: "test",
-		POSTGRES_PASSWORD: "test",
-		POSTGRES_DB: "test",
-	})
-	.withExposedPorts(5432)
-	.start();
-
+const container = await new PostgreSqlContainer("postgres:17.5").start();
 const db = setupDb(container.getConnectionUri());
 
 vi.doMock("@/db", async (importOriginal) => {
