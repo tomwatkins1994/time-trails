@@ -17,10 +17,10 @@ export const placesRouter = {
 				limit: limit + 1,
 			});
 
-			let nextCursor: typeof cursor | undefined = undefined;
+			let nextCursor: typeof cursor | null = null;
 			if (places.length > limit) {
 				const nextPlace = places.pop();
-				nextCursor = nextPlace?.id;
+				nextCursor = nextPlace?.id ?? null;
 			}
 
 			return {
