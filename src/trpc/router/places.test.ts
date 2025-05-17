@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { seed } from "drizzle-seed";
-import { createCaller } from ".";
+import { createCaller } from "@/trpc/router";
 import { db } from "@/db";
 import { places } from "@/db/schema";
 
