@@ -8,7 +8,7 @@ import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
 
-export const Route = createFileRoute("/places")({
+export const Route = createFileRoute("/places/")({
 	component: Home,
 	validateSearch: z.object({
 		pages: z.number().optional().default(1),
