@@ -40,7 +40,9 @@ export function ManagedByWebsiteLink({
 				onKeyUp={openWebsite}
 			/>
 			{showText ? (
-				<span className="font-bold">View on {linkText} website</span>
+				<span className="font-[Cinzel] text-md font-semibold">
+					View on {linkText} website
+				</span>
 			) : null}
 		</div>
 	);

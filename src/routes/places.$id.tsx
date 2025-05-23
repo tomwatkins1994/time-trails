@@ -29,9 +29,9 @@ function RouteComponent() {
 	return (
 		<Card className="flex flex-col sm:flex-row sm:gap-0">
 			<div className="flex flex-col gap-6 flex-grow">
-				<CardHeader>
-					<CardTitle>{place.name}</CardTitle>
-					<CardDescription>
+				<CardHeader className="gap-0">
+					<CardTitle className="text-xl">{place.name}</CardTitle>
+					<CardDescription className="text-lg">
 						{[place.town, place.county].filter(Boolean).join(", ")}
 					</CardDescription>
 				</CardHeader>
