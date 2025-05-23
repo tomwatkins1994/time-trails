@@ -1,3 +1,4 @@
+import { ManagedByWebsiteLink } from "@/components/managed-by-website-link";
 import {
 	Card,
 	CardContent,
@@ -27,14 +28,24 @@ function RouteComponent() {
 
 	return (
 		<Card className="flex flex-col sm:flex-row sm:gap-0">
-			<div className="flex flex-col gap-6">
+			<div className="flex flex-col gap-6 flex-grow">
 				<CardHeader>
 					<CardTitle>{place.name}</CardTitle>
 					<CardDescription>
 						{[place.town, place.county].filter(Boolean).join(", ")}
 					</CardDescription>
 				</CardHeader>
-				<CardContent className="text-sm">{place.description}</CardContent>
+				<CardContent className="text-sm">
+					{place.description}
+					{place.managedBy && place.managerWebsiteUrl ? (
+						<ManagedByWebsiteLink
+							className="mt-4"
+							managedBy={place.managedBy}
+							managerWebsiteUrl={place.managerWebsiteUrl}
+							showText
+						/>
+					) : null}
+				</CardContent>
 			</div>
 			{place.imageUrl ? (
 				<CardContent className="w-full sm:max-w-[50%]">
