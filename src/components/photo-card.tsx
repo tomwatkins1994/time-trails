@@ -34,7 +34,7 @@ export function PhotoCard({
 			) : null}
 			<CardHeader>
 				<div className="flex gap-2 justify-between">
-					<div className="font-[Cinzel]">
+					<div>
 						<CardTitle>{title}</CardTitle>
 						<CardDescription>{subTitle}</CardDescription>
 					</div>
