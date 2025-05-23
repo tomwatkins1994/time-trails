@@ -36,6 +36,13 @@
       "when": 1746924725540,
       "tag": "0004_lucky_firebrand",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1748040081103,
+      "tag": "0005_sour_exodus",
+      "breakpoints": true
     }
   ]
 }
