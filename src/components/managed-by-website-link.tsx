@@ -23,7 +23,7 @@ export function ManagedByWebsiteLink({
 		<img
 			src={iconSrc}
 			alt="Go to website"
-			className="size-10"
+			className="size-10 cursor-pointer"
 			onClick={openWebsite}
 			onKeyUp={openWebsite}
 		/>
