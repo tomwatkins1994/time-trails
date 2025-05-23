@@ -10,6 +10,14 @@ export async function upsertPlaces() {
 		town: place.town,
 		county: place.county,
 		imageUrl: place.imageUrl,
+		imageDescription: place.imageDescription,
+		imageCredit: place.links
+			.map((link) => {
+				if ("imageLink" in link) {
+					return link.imageLink.credit;
+				}
+			})
+			.filter(Boolean)[0],
 		managedBy: "NATIONAL_TRUST" as const,
 		managerId: place.id.value,
 		managerWebsiteUrl: place.websiteUrl,
@@ -26,6 +34,8 @@ export async function upsertPlaces() {
 				town: sql`excluded.town`,
 				county: sql`excluded.county`,
 				imageUrl: sql`excluded.image_url`,
+				imageDescription: sql`excluded.image_description`,
+				imageCredit: sql`excluded.image_credit`,
 				managerWebsiteUrl: sql`excluded.manager_website_url`,
 			},
 		});
