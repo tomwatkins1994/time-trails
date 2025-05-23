@@ -26,14 +26,21 @@ function RouteComponent() {
 	if (!place) return;
 
 	return (
-		<Card>
-			<CardHeader>
-				<CardTitle>{place.name}</CardTitle>
-				<CardDescription>
-					{[place.town, place.county].filter(Boolean).join(", ")}
-				</CardDescription>
-			</CardHeader>
-			<CardContent className="text-sm">{place.description}</CardContent>
+		<Card className="flex flex-col sm:flex-row sm:gap-0">
+			<div className="flex flex-col gap-6">
+				<CardHeader>
+					<CardTitle>{place.name}</CardTitle>
+					<CardDescription>
+						{[place.town, place.county].filter(Boolean).join(", ")}
+					</CardDescription>
+				</CardHeader>
+				<CardContent className="text-sm">{place.description}</CardContent>
+			</div>
+			{place.imageUrl ? (
+				<CardContent className="w-full sm:max-w-[50%]">
+					<img src={place.imageUrl} alt="TODO" className="rounded-xl" />
+				</CardContent>
+			) : null}
 		</Card>
 	);
 }
