@@ -28,7 +28,7 @@ export function ManagedByWebsiteLink({
 	return (
 		<div
 			className={cn(
-				"flex gap-2 items-center cursor-pointer hover:underline",
+				"flex gap-2 items-center cursor-pointer hover:underline hover:font-bold",
 				className,
 			)}
 		>
