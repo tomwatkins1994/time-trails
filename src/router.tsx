@@ -44,7 +44,7 @@ export function createRouter() {
 		routeTree,
 		context: {
 			queryClient,
-			trpc: serverHelpers,
+			trpcQuery: serverHelpers,
 		},
 		defaultPreload: "intent",
 		// defaultErrorComponent: DefaultCatchBoundary,

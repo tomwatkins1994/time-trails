@@ -18,7 +18,7 @@ export const Route = createFileRoute("/places/")({
 	}),
 	loader: async ({ context, deps }) => {
 		await context.queryClient.prefetchInfiniteQuery({
-			...context.trpc.places.infiniteList.infiniteQueryOptions({
+			...context.trpcQuery.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
 			}),
 			pages: deps.pages,

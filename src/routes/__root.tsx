@@ -14,7 +14,7 @@ import { NavBar } from "@/components/navbar";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
-	trpc: TRPCOptionsProxy<TRPCRouter>;
+	trpcQuery: TRPCOptionsProxy<TRPCRouter>;
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
