@@ -9,6 +9,7 @@ import {
 import { useTRPC } from "@/trpc/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
+import { InfoIcon } from "lucide-react";
 
 export const Route = createFileRoute("/places/$id")({
 	loader: async ({ context, params }) => {
@@ -50,6 +51,12 @@ function RouteComponent() {
 			{place.imageUrl ? (
 				<CardContent className="w-full sm:max-w-[50%]">
 					<img src={place.imageUrl} alt="TODO" className="rounded-xl" />
+					<div className="flex gap-2 items-center text-xs text-muted-foreground mt-2 px-2">
+						<InfoIcon size={24} />
+						<div>
+							{place.imageDescription} | © {place.imageCredit}
+						</div>
+					</div>
 				</CardContent>
 			) : null}
 		</Card>
