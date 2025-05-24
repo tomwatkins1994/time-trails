@@ -19,11 +19,20 @@ export const placesRouter = {
 			z.object({
 				cursor: z.string().nullable(),
 				limit: z.number().default(12),
+				search: z
+					.object({
+						name: z.string().nullable().optional(),
+					})
+					.optional(),
 			}),
 		)
-		.query(async ({ input: { cursor, limit } }) => {
+		.query(async ({ input: { cursor, limit, search } }) => {
 			const places = await db.query.places.findMany({
-				where: (t, { gte }) => (cursor ? gte(t.id, cursor) : undefined),
+				where: (t, { and, gte, ilike }) =>
+					and(
+						cursor ? gte(t.id, cursor) : undefined,
+						search?.name ? ilike(t.name, `%${search.name}%`) : undefined,
+					),
 				orderBy: (t, { asc }) => asc(t.id),
 				limit: limit + 1,
 			});

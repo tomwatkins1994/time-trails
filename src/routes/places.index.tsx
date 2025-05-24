@@ -8,19 +8,26 @@ import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
 import { Input } from "@/components/ui/input";
+import { SearchIcon } from "lucide-react";
+import { useState } from "react";
 
 export const Route = createFileRoute("/places/")({
 	component: Home,
 	validateSearch: z.object({
 		pages: z.number().optional().default(1),
+		name: z.string().optional(),
 	}),
 	loaderDeps: ({ search }) => ({
 		pages: search.pages,
+		name: search.name,
 	}),
 	loader: async ({ context, deps }) => {
 		await context.queryClient.prefetchInfiniteQuery({
 			...context.trpcQuery.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
+				search: {
+					name: deps.name,
+				},
 			}),
 			pages: deps.pages,
 			getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -30,7 +37,11 @@ export const Route = createFileRoute("/places/")({
 
 function Home() {
 	const trpc = useTRPC();
+	const deps = Route.useLoaderDeps();
 	const navigate = Route.useNavigate();
+
+	const [searchInputValue, setSearchInputValue] = useState(deps.name);
+	const [submittedSearchValue, setSubmittedSearchValue] = useState(deps.name);
 	const {
 		data: places,
 		isLoading,
@@ -39,7 +50,12 @@ function Home() {
 		isFetchingNextPage,
 	} = useInfiniteQuery(
 		trpc.places.infiniteList.infiniteQueryOptions(
-			{ cursor: null },
+			{
+				cursor: null,
+				search: {
+					name: submittedSearchValue,
+				},
+			},
 			{
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
 			},
@@ -52,7 +68,26 @@ function Home() {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<Input placeholder="Search" />
+			<div className="flex gap-2">
+				<Input
+					placeholder="Search"
+					value={searchInputValue}
+					onChange={(e) => setSearchInputValue(e.target.value)}
+				/>
+				<Button
+					onClick={() => {
+						setSubmittedSearchValue(searchInputValue);
+						navigate({
+							from: Route.fullPath,
+							search: () => ({ name: searchInputValue || undefined }),
+							resetScroll: false,
+							replace: true,
+						});
+					}}
+				>
+					<SearchIcon />
+				</Button>
+			</div>
 			<CardLayoutGrid>
 				{places?.pages.map((page) =>
 					page.items.map((place) => (
