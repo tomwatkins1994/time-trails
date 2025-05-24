@@ -5,6 +5,8 @@ import {
 	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
+import { createServerFn } from "@tanstack/react-start";
+import { getCookie } from "@tanstack/react-start/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { TRPCRouter } from "../trpc/router";
@@ -16,6 +18,10 @@ interface MyRouterContext {
 	queryClient: QueryClient;
 	trpcQuery: TRPCOptionsProxy<TRPCRouter>;
 }
+
+export const getThemeServerFn = createServerFn().handler(async () => {
+	return getCookie("theme") || "light";
+});
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
@@ -45,6 +51,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		],
 	}),
 	component: RootComponent,
+	loader: () => getThemeServerFn(),
 });
 
 function RootComponent() {
@@ -56,8 +63,10 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+	const theme = Route.useLoaderData();
+
 	return (
-		<html lang="en">
+		<html lang="en" className={theme === "dark" ? theme : undefined}>
 			<head>
 				<HeadContent />
 			</head>
