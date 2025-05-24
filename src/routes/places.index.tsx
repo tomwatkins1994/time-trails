@@ -7,6 +7,7 @@ import { PhotoCard } from "@/components/photo-card";
 import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
+import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/places/")({
 	component: Home,
@@ -51,6 +52,7 @@ function Home() {
 
 	return (
 		<div className="flex flex-col gap-4">
+			<Input placeholder="Search" />
 			<CardLayoutGrid>
 				{places?.pages.map((page) =>
 					page.items.map((place) => (
