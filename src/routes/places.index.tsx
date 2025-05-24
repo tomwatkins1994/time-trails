@@ -1,15 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
+import { useState } from "react";
 
 import { useTRPC } from "@/trpc/react";
 import { PhotoCard } from "@/components/photo-card";
 import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
-import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
-import { useState } from "react";
+import { SearchBox } from "@/components/search-box";
 
 export const Route = createFileRoute("/places/")({
 	component: Home,
@@ -40,7 +39,6 @@ function Home() {
 	const deps = Route.useLoaderDeps();
 	const navigate = Route.useNavigate();
 
-	const [searchInputValue, setSearchInputValue] = useState(deps.name);
 	const [submittedSearchValue, setSubmittedSearchValue] = useState(deps.name);
 	const {
 		data: places,
@@ -63,11 +61,11 @@ function Home() {
 		),
 	);
 
-	const submitSearch = () => {
-		setSubmittedSearchValue(searchInputValue);
+	const submitSearch = (searchValue: string) => {
+		setSubmittedSearchValue(searchValue);
 		navigate({
 			from: Route.fullPath,
-			search: () => ({ name: searchInputValue || undefined }),
+			search: () => ({ name: searchValue || undefined }),
 			resetScroll: false,
 			replace: true,
 		});
@@ -79,17 +77,7 @@ function Home() {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<div className="flex gap-2">
-				<Input
-					placeholder="Search"
-					value={searchInputValue}
-					onChange={(e) => setSearchInputValue(e.target.value)}
-					onKeyUp={(e) => e.key === "Enter" && submitSearch()}
-				/>
-				<Button onClick={submitSearch}>
-					<SearchIcon />
-				</Button>
-			</div>
+			<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
 			<CardLayoutGrid>
 				{places?.pages.map((page) =>
 					page.items.map((place) => (
