@@ -119,7 +119,10 @@ function Home() {
 							await fetchNextPage();
 							navigate({
 								from: Route.fullPath,
-								search: () => ({ pages: (places?.pages.length ?? 0) + 1 }),
+								search: (existing) => ({
+									...existing,
+									pages: (places?.pages.length ?? 0) + 1,
+								}),
 								resetScroll: false,
 								replace: true,
 							});
