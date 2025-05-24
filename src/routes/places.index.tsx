@@ -58,6 +58,7 @@ function Home() {
 			},
 			{
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
+				placeholderData: (prev) => prev,
 			},
 		),
 	);
