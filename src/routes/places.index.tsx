@@ -62,6 +62,16 @@ function Home() {
 		),
 	);
 
+	const submitSearch = () => {
+		setSubmittedSearchValue(searchInputValue);
+		navigate({
+			from: Route.fullPath,
+			search: () => ({ name: searchInputValue || undefined }),
+			resetScroll: false,
+			replace: true,
+		});
+	};
+
 	if (isLoading) {
 		return "Loading...";
 	}
@@ -73,18 +83,9 @@ function Home() {
 					placeholder="Search"
 					value={searchInputValue}
 					onChange={(e) => setSearchInputValue(e.target.value)}
+					onKeyUp={(e) => e.key === "Enter" && submitSearch()}
 				/>
-				<Button
-					onClick={() => {
-						setSubmittedSearchValue(searchInputValue);
-						navigate({
-							from: Route.fullPath,
-							search: () => ({ name: searchInputValue || undefined }),
-							resetScroll: false,
-							replace: true,
-						});
-					}}
-				>
+				<Button onClick={submitSearch}>
 					<SearchIcon />
 				</Button>
 			</div>
