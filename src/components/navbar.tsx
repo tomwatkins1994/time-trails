@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import ttIcon from "@/assets/time-trails-icon.png";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export function NavBar() {
 	return (
@@ -20,7 +21,9 @@ export function NavBar() {
 					</Link>
 				</div>
 			</div>
-			<div>Search</div>
+			<div>
+				<ThemeSwitcher />
+			</div>
 		</nav>
 	);
 }
