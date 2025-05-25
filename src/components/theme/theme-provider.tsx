@@ -3,6 +3,7 @@ import {
 	use,
 	useCallback,
 	useEffect,
+	useMemo,
 	useState,
 	type PropsWithChildren,
 } from "react";
@@ -82,15 +83,10 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 		return () => media.removeEventListener("change", handleSystemThemeChanged);
 	}, [handleSystemThemeChanged]);
 
-	return (
-		<ThemeContext
-			value={{
-				theme,
-				setTheme,
-				toggleTheme,
-			}}
-		>
-			{children}
-		</ThemeContext>
+	const contextValue = useMemo(
+		() => ({ theme, setTheme, toggleTheme }),
+		[theme, setTheme, toggleTheme],
 	);
+
+	return <ThemeContext value={contextValue}>{children}</ThemeContext>;
 }
