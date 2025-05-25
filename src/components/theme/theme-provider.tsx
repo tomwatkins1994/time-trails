@@ -38,15 +38,15 @@ function getTheme() {
 	return theme || "system";
 }
 
+function resolveTheme(theme: string) {
+	if (theme === "system") {
+		return getSystemTheme();
+	}
+	return theme;
+}
+
 export function ThemeProvider({ children }: PropsWithChildren) {
 	const [theme, setThemeValue] = useState(() => getTheme() || "system");
-
-	const getResolvedTheme = useCallback(() => {
-		if (theme === "system") {
-			return getSystemTheme();
-		}
-		return theme;
-	}, [theme]);
 
 	const applyTheme = useCallback((newTheme: string) => {
 		document.documentElement.classList.toggle("dark", newTheme === "dark");
@@ -55,20 +55,20 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 	const setTheme = useCallback(
 		(newTheme: string) => {
 			setThemeValue(newTheme);
-			applyTheme(getResolvedTheme());
+			applyTheme(resolveTheme(newTheme));
 			try {
 				localStorage.setItem("theme", newTheme);
 			} catch (_) {
 				console.error("Local storage not supported");
 			}
 		},
-		[getResolvedTheme, applyTheme],
+		[applyTheme],
 	);
 
 	const toggleTheme = useCallback(() => {
-		const newTheme = getResolvedTheme() === "dark" ? "light" : "dark";
+		const newTheme = resolveTheme(theme) === "dark" ? "light" : "dark";
 		setTheme(newTheme);
-	}, [getResolvedTheme, setTheme]);
+	}, [theme, setTheme]);
 
 	const handleSystemThemeChanged = useCallback(() => {
 		if (theme === "system") {
