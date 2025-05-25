@@ -2,6 +2,7 @@ import {
 	createContext,
 	use,
 	useCallback,
+	useEffect,
 	useState,
 	type PropsWithChildren,
 } from "react";
@@ -33,26 +34,46 @@ function getTheme() {
 	} catch (_) {
 		console.error("Local storage not supported");
 	}
-	if ((theme || "system") === "system") {
-		return getSystemTheme();
-	}
-	return theme;
+	return theme || "system";
 }
 
 export function ThemeProvider({ children }: PropsWithChildren) {
 	const [theme, setTheme] = useState(getTheme);
+	const usingSystemTheme = (theme || "system") === "system";
+
+	const getResolvedTheme = useCallback(() => {
+		if (usingSystemTheme) {
+			return getSystemTheme();
+		}
+		return theme;
+	}, [theme, usingSystemTheme]);
+
+	const applyTheme = useCallback((newTheme: string) => {
+		document.documentElement.classList.toggle("dark", newTheme === "dark");
+	}, []);
 
 	const toggleTheme = useCallback(() => {
-		if (!theme) return;
-		document.documentElement.classList.toggle("dark", theme !== "dark");
-		const newTheme = theme === "dark" ? "light" : "dark";
+		const newTheme = getResolvedTheme() === "dark" ? "light" : "dark";
 		setTheme(newTheme);
+		applyTheme(newTheme);
 		try {
 			localStorage.setItem("theme", newTheme);
 		} catch (_) {
 			console.error("Local storage not supported");
 		}
-	}, [theme]);
+	}, [getResolvedTheme, applyTheme]);
+
+	const handleSystemThemeChanged = useCallback(() => {
+		if (usingSystemTheme) {
+			return applyTheme(getSystemTheme());
+		}
+	}, [usingSystemTheme, applyTheme]);
+
+	useEffect(() => {
+		const media = window.matchMedia("(prefers-color-scheme: dark)");
+		media.addEventListener("change", handleSystemThemeChanged);
+		return () => media.removeEventListener("change", handleSystemThemeChanged);
+	}, [handleSystemThemeChanged]);
 
 	return (
 		<ThemeContext
