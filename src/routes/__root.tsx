@@ -12,6 +12,7 @@ import type { TRPCRouter } from "../trpc/router";
 import appCss from "@/styles/app.css?url";
 import { NavBar } from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeScript } from "@/components/theme/theme-script";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -62,6 +63,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
+				<ThemeScript />
 				<HeadContent />
 			</head>
 			<body>
