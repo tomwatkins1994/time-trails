@@ -8,7 +8,8 @@ import {
 } from "react";
 
 const ThemeContext = createContext<{
-	theme: string | null;
+	theme: string;
+	setTheme: (newTheme: string) => void;
 	toggleTheme: () => void;
 } | null>(null);
 
@@ -38,36 +39,42 @@ function getTheme() {
 }
 
 export function ThemeProvider({ children }: PropsWithChildren) {
-	const [theme, setTheme] = useState(getTheme);
-	const usingSystemTheme = (theme || "system") === "system";
+	const [theme, setThemeValue] = useState(() => getTheme() || "system");
 
 	const getResolvedTheme = useCallback(() => {
-		if (usingSystemTheme) {
+		if (theme === "system") {
 			return getSystemTheme();
 		}
 		return theme;
-	}, [theme, usingSystemTheme]);
+	}, [theme]);
 
 	const applyTheme = useCallback((newTheme: string) => {
 		document.documentElement.classList.toggle("dark", newTheme === "dark");
 	}, []);
 
+	const setTheme = useCallback(
+		(newTheme: string) => {
+			setThemeValue(newTheme);
+			applyTheme(getResolvedTheme());
+			try {
+				localStorage.setItem("theme", newTheme);
+			} catch (_) {
+				console.error("Local storage not supported");
+			}
+		},
+		[getResolvedTheme, applyTheme],
+	);
+
 	const toggleTheme = useCallback(() => {
 		const newTheme = getResolvedTheme() === "dark" ? "light" : "dark";
 		setTheme(newTheme);
-		applyTheme(newTheme);
-		try {
-			localStorage.setItem("theme", newTheme);
-		} catch (_) {
-			console.error("Local storage not supported");
-		}
-	}, [getResolvedTheme, applyTheme]);
+	}, [getResolvedTheme, setTheme]);
 
 	const handleSystemThemeChanged = useCallback(() => {
-		if (usingSystemTheme) {
+		if (theme === "system") {
 			return applyTheme(getSystemTheme());
 		}
-	}, [usingSystemTheme, applyTheme]);
+	}, [theme, applyTheme]);
 
 	useEffect(() => {
 		const media = window.matchMedia("(prefers-color-scheme: dark)");
@@ -79,6 +86,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 		<ThemeContext
 			value={{
 				theme,
+				setTheme,
 				toggleTheme,
 			}}
 		>
