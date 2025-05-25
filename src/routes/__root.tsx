@@ -13,6 +13,7 @@ import type { TRPCRouter } from "../trpc/router";
 
 import appCss from "@/styles/app.css?url";
 import { NavBar } from "@/components/navbar";
+import { ThemeProvider, useTheme } from "@/components/providers/theme-provider";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
@@ -55,15 +56,19 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 });
 
 function RootComponent() {
+	const theme = Route.useLoaderData();
+
 	return (
-		<RootDocument>
-			<Outlet />
-		</RootDocument>
+		<ThemeProvider initialTheme={theme}>
+			<RootDocument>
+				<Outlet />
+			</RootDocument>
+		</ThemeProvider>
 	);
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-	const theme = Route.useLoaderData();
+	const { theme } = useTheme();
 
 	return (
 		<html lang="en" className={theme === "dark" ? theme : undefined}>
