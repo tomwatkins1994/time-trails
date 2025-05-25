@@ -5,24 +5,19 @@ import {
 	Scripts,
 	createRootRouteWithContext,
 } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { getCookie } from "@tanstack/react-start/server";
 import type { QueryClient } from "@tanstack/react-query";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import type { TRPCRouter } from "../trpc/router";
 
 import appCss from "@/styles/app.css?url";
 import { NavBar } from "@/components/navbar";
-import { ThemeProvider, useTheme } from "@/components/providers/theme-provider";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeScript } from "@/components/theme/theme-script";
 
 interface MyRouterContext {
 	queryClient: QueryClient;
 	trpcQuery: TRPCOptionsProxy<TRPCRouter>;
 }
-
-export const getThemeServerFn = createServerFn().handler(async () => {
-	return getCookie("theme") || "light";
-});
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	head: () => ({
@@ -52,14 +47,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 		],
 	}),
 	component: RootComponent,
-	loader: () => getThemeServerFn(),
 });
 
 function RootComponent() {
-	const theme = Route.useLoaderData();
-
 	return (
-		<ThemeProvider initialTheme={theme}>
+		<ThemeProvider>
 			<RootDocument>
 				<Outlet />
 			</RootDocument>
@@ -68,11 +60,10 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-	const { theme } = useTheme();
-
 	return (
-		<html lang="en" className={theme === "dark" ? theme : undefined}>
+		<html lang="en" suppressHydrationWarning>
 			<head>
+				<ThemeScript />
 				<HeadContent />
 			</head>
 			<body>

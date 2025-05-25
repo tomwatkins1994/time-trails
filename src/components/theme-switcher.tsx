@@ -1,13 +1,29 @@
 import { MoonIcon, SunIcon } from "lucide-react";
-import { useTheme } from "./providers/theme-provider";
+import { useTheme } from "./theme/theme-provider";
 import { Button } from "./ui/button";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export function ThemeSwitcher() {
-	const { theme, toggleTheme } = useTheme();
+	const { toggleTheme } = useTheme();
 
 	return (
-		<Button onClick={toggleTheme}>
-			{theme === "dark" ? <SunIcon /> : <MoonIcon />}
+		<Button className="w-[36px]" onClick={toggleTheme}>
+			<ThemeIcon />
 		</Button>
 	);
+}
+
+function ThemeIcon() {
+	const [mounted, setMounted] = useState(false);
+	const { theme } = useTheme();
+
+	useLayoutEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) {
+		return null;
+	}
+
+	return theme === "dark" ? <SunIcon /> : <MoonIcon />;
 }
