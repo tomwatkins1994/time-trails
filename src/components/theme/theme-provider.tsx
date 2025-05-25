@@ -7,7 +7,7 @@ import {
 } from "react";
 
 const ThemeContext = createContext<{
-	theme: string | undefined;
+	theme: string | null;
 	toggleTheme: () => void;
 } | null>(null);
 
@@ -26,9 +26,14 @@ function getSystemTheme() {
 }
 
 function getTheme() {
-	if (typeof window === "undefined") return;
-	const theme = localStorage.getItem("theme") || "system";
-	if (theme === "system") {
+	if (typeof window === "undefined") return null;
+	let theme: string | null = null;
+	try {
+		theme = localStorage.getItem("theme");
+	} catch (_) {
+		console.error("Local storage not supported");
+	}
+	if ((theme || "system") === "system") {
 		return getSystemTheme();
 	}
 	return theme;
