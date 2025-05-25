@@ -6,7 +6,7 @@ export function ThemeSwitcher() {
 	const { toggleTheme } = useTheme();
 
 	return (
-		<Button className="w-[36px]" onClick={toggleTheme}>
+		<Button onClick={toggleTheme}>
 			<SunIcon className="hidden dark:block" />
 			<MoonIcon className="dark:hidden" />
 		</Button>
