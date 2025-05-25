@@ -5,6 +5,7 @@ import {
 	useState,
 	type PropsWithChildren,
 } from "react";
+import { ThemeScript } from "./theme-script";
 
 const ThemeContext = createContext<{
 	theme: string | null;
@@ -61,6 +62,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 				toggleTheme,
 			}}
 		>
+			<ThemeScript />
 			{children}
 		</ThemeContext>
 	);
