@@ -30,13 +30,12 @@ function getSystemTheme() {
 
 function getTheme() {
 	if (typeof window === "undefined") return null;
-	let theme: string | null = null;
 	try {
-		theme = localStorage.getItem("theme");
+		return localStorage.getItem("theme") || "system";
 	} catch (_) {
 		console.error("Local storage not supported");
+		return "system";
 	}
-	return theme || "system";
 }
 
 function resolveTheme(theme: string) {
