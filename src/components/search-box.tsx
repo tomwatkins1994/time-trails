@@ -27,7 +27,7 @@ export function SearchBox({
 			{...props}
 		>
 			<Input
-				className="border-none outline-0 focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:ring-0 shadow-none"
+				className="border-none dark:bg-transparent outline-0 focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:ring-0 shadow-none"
 				placeholder="Search"
 				value={inputValue}
 				onChange={(e) => setInputValue(e.target.value)}

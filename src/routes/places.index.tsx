@@ -1,8 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-	useInfiniteQuery,
-	useSuspenseInfiniteQuery,
-} from "@tanstack/react-query";
+import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useCallback, useState } from "react";
 
