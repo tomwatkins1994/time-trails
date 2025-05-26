@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+	useInfiniteQuery,
+	useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
 import { z } from "zod";
 import { useState } from "react";
 
@@ -42,11 +45,10 @@ function Home() {
 	const [submittedSearchValue, setSubmittedSearchValue] = useState(deps.name);
 	const {
 		data: places,
-		isLoading,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
-	} = useInfiniteQuery(
+	} = useSuspenseInfiniteQuery(
 		trpc.places.infiniteList.infiniteQueryOptions(
 			{
 				cursor: null,
@@ -70,10 +72,6 @@ function Home() {
 			replace: true,
 		});
 	};
-
-	if (isLoading) {
-		return "Loading...";
-	}
 
 	return (
 		<div className="flex flex-col gap-4">
