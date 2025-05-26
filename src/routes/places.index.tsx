@@ -4,7 +4,7 @@ import {
 	useSuspenseInfiniteQuery,
 } from "@tanstack/react-query";
 import { z } from "zod";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useTRPC } from "@/trpc/react";
 import { PhotoCard } from "@/components/photo-card";
@@ -63,15 +63,18 @@ function Home() {
 		),
 	);
 
-	const submitSearch = (searchValue: string) => {
-		setSubmittedSearchValue(searchValue);
-		navigate({
-			from: Route.fullPath,
-			search: () => ({ name: searchValue || undefined }),
-			resetScroll: false,
-			replace: true,
-		});
-	};
+	const submitSearch = useCallback(
+		(searchValue: string) => {
+			setSubmittedSearchValue(searchValue);
+			navigate({
+				from: Route.fullPath,
+				search: () => ({ name: searchValue || undefined }),
+				resetScroll: false,
+				replace: true,
+			});
+		},
+		[navigate],
+	);
 
 	return (
 		<div className="flex flex-col gap-4">
