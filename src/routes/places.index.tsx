@@ -16,13 +16,10 @@ export const Route = createFileRoute("/places/")({
 		pages: z.number().optional().default(1),
 		name: z.string().optional(),
 	}),
-	loaderDeps: ({ search }) => ({
-		pages: search.pages,
-		name: search.name,
-	}),
-	loader: async ({ context, deps }) => {
-		await context.queryClient.prefetchInfiniteQuery({
-			...context.trpcQuery.places.infiniteList.infiniteQueryOptions({
+	loaderDeps: ({ search }) => ({ ...search }),
+	loader: async ({ context: { queryClient, trpcQuery }, deps }) => {
+		await queryClient.prefetchInfiniteQuery({
+			...trpcQuery.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
 				search: {
 					name: deps.name,
