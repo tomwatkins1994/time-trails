@@ -38,10 +38,10 @@ const navigateOptions = linkOptions({
 });
 
 function Home() {
-	const trpc = useTRPC();
 	const deps = Route.useLoaderDeps();
 	const navigate = Route.useNavigate();
 
+	const trpc = useTRPC();
 	const [submittedSearchValue, setSubmittedSearchValue] = useState(deps.name);
 	const {
 		data: places,
