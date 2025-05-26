@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, linkOptions } from "@tanstack/react-router";
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { useCallback, useState } from "react";
@@ -34,6 +34,12 @@ export const Route = createFileRoute("/places/")({
 	},
 });
 
+const navigateOptions = linkOptions({
+	from: Route.fullPath,
+	resetScroll: false,
+	replace: true,
+});
+
 function Home() {
 	const trpc = useTRPC();
 	const deps = Route.useLoaderDeps();
@@ -64,10 +70,8 @@ function Home() {
 		(searchValue: string) => {
 			setSubmittedSearchValue(searchValue);
 			navigate({
-				from: Route.fullPath,
+				...navigateOptions,
 				search: () => ({ name: searchValue || undefined }),
-				resetScroll: false,
-				replace: true,
 			});
 		},
 		[navigate],
@@ -106,13 +110,11 @@ function Home() {
 						onClick={async () => {
 							await fetchNextPage();
 							navigate({
-								from: Route.fullPath,
+								...navigateOptions,
 								search: (existing) => ({
 									...existing,
 									pages: (places?.pages.length ?? 0) + 1,
 								}),
-								resetScroll: false,
-								replace: true,
 							});
 						}}
 					>
