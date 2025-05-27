@@ -24,6 +24,19 @@
 			"recommended": true,
 			"correctness": {
 				"noChildrenProp": "off"
+			},
+			"a11y": {
+				"noLabelWithoutControl": {
+					"level": "warn",
+					"options": {
+						"inputComponents": [
+							"Input"
+						],
+						"labelComponents": [
+							"Label"
+						]
+					}
+				}
 			}
 		}
 	},
