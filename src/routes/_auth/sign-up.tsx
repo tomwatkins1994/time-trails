@@ -47,19 +47,18 @@ function RouteComponent() {
 	return (
 		<Card className="w-full max-w-[600px]">
 			<CardHeader>
-				<div className="flex gap-2">
-					<TimeTrailsIcon className="h-13 md:h-15" />
-					<div>
-						<CardTitle className="text-xl md:text-2xl font-medium font-[Cinzel]">
-							Time Trails
-						</CardTitle>
-						<CardDescription className="text-md md:text-lg">
-							Sign Up
-						</CardDescription>
-					</div>
-				</div>
+				<CardTitle className="flex justify-center items-center gap-2 text-2xl md:text-3xl font-medium font-[Cinzel]">
+					<TimeTrailsIcon className="h-10 md:h-12" />
+					Time Trails
+				</CardTitle>
 			</CardHeader>
 			<CardContent>
+				<div className="font-[Cinzel] text-xl md:text-2xl flex justify-center">
+					Sign Up
+				</div>
+				<div className="flex justify-center mb-6">
+					Begin exploring the UK today!
+				</div>
 				<form
 					className="space-y-4"
 					onSubmit={(e) => {
