@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
 import { SearchBox } from "@/components/search-box";
 
-export const Route = createFileRoute("/places/")({
+export const Route = createFileRoute("/(main)/places")({
 	component: Home,
 	validateSearch: z.object({
 		pages: z.number().optional().default(1),
