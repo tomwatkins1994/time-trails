@@ -11,108 +11,133 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as mainIndexImport } from './routes/(main)/index'
-import { Route as mainPlacesImport } from './routes/(main)/places'
-import { Route as mainPlacesIdImport } from './routes/(main)/places.$id'
+import { Route as MainImport } from './routes/_main'
+import { Route as MainIndexImport } from './routes/_main/index'
+import { Route as MainPlacesImport } from './routes/_main/places'
+import { Route as MainPlacesIdImport } from './routes/_main/places.$id'
 
 // Create/Update Routes
 
-const mainIndexRoute = mainIndexImport.update({
-  id: '/(main)/',
+const MainRoute = MainImport.update({
+  id: '/_main',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MainIndexRoute = MainIndexImport.update({
+  id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => MainRoute,
 } as any)
 
-const mainPlacesRoute = mainPlacesImport.update({
-  id: '/(main)/places',
+const MainPlacesRoute = MainPlacesImport.update({
+  id: '/places',
   path: '/places',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => MainRoute,
 } as any)
 
-const mainPlacesIdRoute = mainPlacesIdImport.update({
+const MainPlacesIdRoute = MainPlacesIdImport.update({
   id: '/$id',
   path: '/$id',
-  getParentRoute: () => mainPlacesRoute,
+  getParentRoute: () => MainPlacesRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(main)/places': {
-      id: '/(main)/places'
+    '/_main': {
+      id: '/_main'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MainImport
+      parentRoute: typeof rootRoute
+    }
+    '/_main/places': {
+      id: '/_main/places'
       path: '/places'
       fullPath: '/places'
-      preLoaderRoute: typeof mainPlacesImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainPlacesImport
+      parentRoute: typeof MainImport
     }
-    '/(main)/': {
-      id: '/(main)/'
+    '/_main/': {
+      id: '/_main/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof mainIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainIndexImport
+      parentRoute: typeof MainImport
     }
-    '/(main)/places/$id': {
-      id: '/(main)/places/$id'
+    '/_main/places/$id': {
+      id: '/_main/places/$id'
       path: '/$id'
       fullPath: '/places/$id'
-      preLoaderRoute: typeof mainPlacesIdImport
-      parentRoute: typeof mainPlacesImport
+      preLoaderRoute: typeof MainPlacesIdImport
+      parentRoute: typeof MainPlacesImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface mainPlacesRouteChildren {
-  mainPlacesIdRoute: typeof mainPlacesIdRoute
+interface MainPlacesRouteChildren {
+  MainPlacesIdRoute: typeof MainPlacesIdRoute
 }
 
-const mainPlacesRouteChildren: mainPlacesRouteChildren = {
-  mainPlacesIdRoute: mainPlacesIdRoute,
+const MainPlacesRouteChildren: MainPlacesRouteChildren = {
+  MainPlacesIdRoute: MainPlacesIdRoute,
 }
 
-const mainPlacesRouteWithChildren = mainPlacesRoute._addFileChildren(
-  mainPlacesRouteChildren,
+const MainPlacesRouteWithChildren = MainPlacesRoute._addFileChildren(
+  MainPlacesRouteChildren,
 )
 
+interface MainRouteChildren {
+  MainPlacesRoute: typeof MainPlacesRouteWithChildren
+  MainIndexRoute: typeof MainIndexRoute
+}
+
+const MainRouteChildren: MainRouteChildren = {
+  MainPlacesRoute: MainPlacesRouteWithChildren,
+  MainIndexRoute: MainIndexRoute,
+}
+
+const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/places': typeof mainPlacesRouteWithChildren
-  '/': typeof mainIndexRoute
-  '/places/$id': typeof mainPlacesIdRoute
+  '': typeof MainRouteWithChildren
+  '/places': typeof MainPlacesRouteWithChildren
+  '/': typeof MainIndexRoute
+  '/places/$id': typeof MainPlacesIdRoute
 }
 
 export interface FileRoutesByTo {
-  '/places': typeof mainPlacesRouteWithChildren
-  '/': typeof mainIndexRoute
-  '/places/$id': typeof mainPlacesIdRoute
+  '/places': typeof MainPlacesRouteWithChildren
+  '/': typeof MainIndexRoute
+  '/places/$id': typeof MainPlacesIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/(main)/places': typeof mainPlacesRouteWithChildren
-  '/(main)/': typeof mainIndexRoute
-  '/(main)/places/$id': typeof mainPlacesIdRoute
+  '/_main': typeof MainRouteWithChildren
+  '/_main/places': typeof MainPlacesRouteWithChildren
+  '/_main/': typeof MainIndexRoute
+  '/_main/places/$id': typeof MainPlacesIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/places' | '/' | '/places/$id'
+  fullPaths: '' | '/places' | '/' | '/places/$id'
   fileRoutesByTo: FileRoutesByTo
   to: '/places' | '/' | '/places/$id'
-  id: '__root__' | '/(main)/places' | '/(main)/' | '/(main)/places/$id'
+  id: '__root__' | '/_main' | '/_main/places' | '/_main/' | '/_main/places/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  mainPlacesRoute: typeof mainPlacesRouteWithChildren
-  mainIndexRoute: typeof mainIndexRoute
+  MainRoute: typeof MainRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  mainPlacesRoute: mainPlacesRouteWithChildren,
-  mainIndexRoute: mainIndexRoute,
+  MainRoute: MainRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -125,22 +150,30 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/(main)/places",
-        "/(main)/"
+        "/_main"
       ]
     },
-    "/(main)/places": {
-      "filePath": "(main)/places.tsx",
+    "/_main": {
+      "filePath": "_main.tsx",
       "children": [
-        "/(main)/places/$id"
+        "/_main/places",
+        "/_main/"
       ]
     },
-    "/(main)/": {
-      "filePath": "(main)/index.tsx"
+    "/_main/places": {
+      "filePath": "_main/places.tsx",
+      "parent": "/_main",
+      "children": [
+        "/_main/places/$id"
+      ]
     },
-    "/(main)/places/$id": {
-      "filePath": "(main)/places.$id.tsx",
-      "parent": "/(main)/places"
+    "/_main/": {
+      "filePath": "_main/index.tsx",
+      "parent": "/_main"
+    },
+    "/_main/places/$id": {
+      "filePath": "_main/places.$id.tsx",
+      "parent": "/_main/places"
     }
   }
 }

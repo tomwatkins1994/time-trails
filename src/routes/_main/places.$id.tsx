@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
 
-export const Route = createFileRoute("/(main)/places/$id")({
+export const Route = createFileRoute("/_main/places/$id")({
 	loader: async ({ context, params }) => {
 		await context.queryClient.prefetchQuery(
 			context.trpcQuery.places.getById.queryOptions({ id: params.id }),
