@@ -1,13 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import ttIcon from "@/assets/time-trails-icon.png";
 import { ThemeSwitcher } from "./theme-switcher";
+import { TimeTrailsIcon } from "./icons/time-trails-icon";
 
 export function NavBar() {
 	return (
 		<nav className="flex justify-between items-center">
 			<div className="flex gap-4 items-center">
 				<Link to="/" className="flex gap-2 items-center">
-					<img src={ttIcon} alt="Home" className="h-10" />
+					<TimeTrailsIcon />
 					<div className="text-3xl font-medium font-[Cinzel] hidden md:inline-block">
 						TIME TRAILS
 					</div>
