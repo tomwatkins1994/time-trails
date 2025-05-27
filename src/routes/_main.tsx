@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { NavBar } from "@/components/navbar";
 
 export const Route = createFileRoute("/_main")({
 	component: MainLayout,
@@ -6,9 +7,13 @@ export const Route = createFileRoute("/_main")({
 
 function MainLayout() {
 	return (
-		<div>
-			Hello "/(main)/_layout"!
-			<Outlet />
-		</div>
+		<>
+			<header className="sticky top-0 p-4 md:px-8 bg-background">
+				<NavBar />
+			</header>
+			<main className="p-4 md:px-8 md:py-6">
+				<Outlet />
+			</main>
+		</>
 	);
 }
