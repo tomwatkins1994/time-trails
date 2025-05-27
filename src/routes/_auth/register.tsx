@@ -10,7 +10,7 @@ import { TimeTrailsIcon } from "@/components/icons/time-trails-icon";
 import { z } from "zod";
 import { useAppForm } from "@/hooks/useAppForm";
 
-export const Route = createFileRoute("/_auth/sign-up")({
+export const Route = createFileRoute("/_auth/register")({
 	component: RouteComponent,
 });
 
@@ -53,11 +53,11 @@ function RouteComponent() {
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
-				<div className="font-[Cinzel] text-xl md:text-2xl flex justify-center">
-					Sign Up
+				<div className="font-[Cinzel] font-medium text-xl md:text-2xl flex justify-center">
+					Register
 				</div>
-				<div className="flex justify-center mb-6">
-					Begin exploring the UK today!
+				<div className="flex justify-center mb-6 text-muted-foreground">
+					Register an account and begin exploring the UK today!
 				</div>
 				<form
 					className="space-y-4"
@@ -81,7 +81,7 @@ function RouteComponent() {
 						)}
 					/>
 					<form.AppForm>
-						<form.SubmitButton label="Sign Up" className="w-full" />
+						<form.SubmitButton label="Register" className="w-full" />
 					</form.AppForm>
 				</form>
 			</CardContent>
