@@ -11,28 +11,41 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as MainImport } from './routes/_main'
+import { Route as MainRouteImport } from './routes/_main/route'
+import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as MainIndexImport } from './routes/_main/index'
 import { Route as MainPlacesImport } from './routes/_main/places'
+import { Route as AuthSignUpImport } from './routes/_auth/sign-up'
 import { Route as MainPlacesIdImport } from './routes/_main/places.$id'
 
 // Create/Update Routes
 
-const MainRoute = MainImport.update({
+const MainRouteRoute = MainRouteImport.update({
   id: '/_main',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthRouteRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRoute,
 } as any)
 
 const MainIndexRoute = MainIndexImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => MainRoute,
+  getParentRoute: () => MainRouteRoute,
 } as any)
 
 const MainPlacesRoute = MainPlacesImport.update({
   id: '/places',
   path: '/places',
-  getParentRoute: () => MainRoute,
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
+const AuthSignUpRoute = AuthSignUpImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 
 const MainPlacesIdRoute = MainPlacesIdImport.update({
@@ -45,26 +58,40 @@ const MainPlacesIdRoute = MainPlacesIdImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/_main': {
       id: '/_main'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof MainImport
+      preLoaderRoute: typeof MainRouteImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpImport
+      parentRoute: typeof AuthRouteImport
     }
     '/_main/places': {
       id: '/_main/places'
       path: '/places'
       fullPath: '/places'
       preLoaderRoute: typeof MainPlacesImport
-      parentRoute: typeof MainImport
+      parentRoute: typeof MainRouteImport
     }
     '/_main/': {
       id: '/_main/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof MainIndexImport
-      parentRoute: typeof MainImport
+      parentRoute: typeof MainRouteImport
     }
     '/_main/places/$id': {
       id: '/_main/places/$id'
@@ -78,6 +105,18 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface AuthRouteRouteChildren {
+  AuthSignUpRoute: typeof AuthSignUpRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthSignUpRoute: AuthSignUpRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 interface MainPlacesRouteChildren {
   MainPlacesIdRoute: typeof MainPlacesIdRoute
 }
@@ -90,26 +129,31 @@ const MainPlacesRouteWithChildren = MainPlacesRoute._addFileChildren(
   MainPlacesRouteChildren,
 )
 
-interface MainRouteChildren {
+interface MainRouteRouteChildren {
   MainPlacesRoute: typeof MainPlacesRouteWithChildren
   MainIndexRoute: typeof MainIndexRoute
 }
 
-const MainRouteChildren: MainRouteChildren = {
+const MainRouteRouteChildren: MainRouteRouteChildren = {
   MainPlacesRoute: MainPlacesRouteWithChildren,
   MainIndexRoute: MainIndexRoute,
 }
 
-const MainRouteWithChildren = MainRoute._addFileChildren(MainRouteChildren)
+const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
+  MainRouteRouteChildren,
+)
 
 export interface FileRoutesByFullPath {
-  '': typeof MainRouteWithChildren
+  '': typeof MainRouteRouteWithChildren
+  '/sign-up': typeof AuthSignUpRoute
   '/places': typeof MainPlacesRouteWithChildren
   '/': typeof MainIndexRoute
   '/places/$id': typeof MainPlacesIdRoute
 }
 
 export interface FileRoutesByTo {
+  '': typeof AuthRouteRouteWithChildren
+  '/sign-up': typeof AuthSignUpRoute
   '/places': typeof MainPlacesRouteWithChildren
   '/': typeof MainIndexRoute
   '/places/$id': typeof MainPlacesIdRoute
@@ -117,7 +161,9 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/_main': typeof MainRouteWithChildren
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_main': typeof MainRouteRouteWithChildren
+  '/_auth/sign-up': typeof AuthSignUpRoute
   '/_main/places': typeof MainPlacesRouteWithChildren
   '/_main/': typeof MainIndexRoute
   '/_main/places/$id': typeof MainPlacesIdRoute
@@ -125,19 +171,28 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/places' | '/' | '/places/$id'
+  fullPaths: '' | '/sign-up' | '/places' | '/' | '/places/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/places' | '/' | '/places/$id'
-  id: '__root__' | '/_main' | '/_main/places' | '/_main/' | '/_main/places/$id'
+  to: '' | '/sign-up' | '/places' | '/' | '/places/$id'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_main'
+    | '/_auth/sign-up'
+    | '/_main/places'
+    | '/_main/'
+    | '/_main/places/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  MainRoute: typeof MainRouteWithChildren
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  MainRouteRoute: typeof MainRouteRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  MainRoute: MainRouteWithChildren,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  MainRouteRoute: MainRouteRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -150,15 +205,26 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/_auth",
         "/_main"
       ]
     },
+    "/_auth": {
+      "filePath": "_auth/route.tsx",
+      "children": [
+        "/_auth/sign-up"
+      ]
+    },
     "/_main": {
-      "filePath": "_main.tsx",
+      "filePath": "_main/route.tsx",
       "children": [
         "/_main/places",
         "/_main/"
       ]
+    },
+    "/_auth/sign-up": {
+      "filePath": "_auth/sign-up.tsx",
+      "parent": "/_auth"
     },
     "/_main/places": {
       "filePath": "_main/places.tsx",
