@@ -43,6 +43,13 @@
       "when": 1748040081103,
       "tag": "0005_sour_exodus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1748467336300,
+      "tag": "0006_cold_bloodaxe",
+      "breakpoints": true
     }
   ]
 }
