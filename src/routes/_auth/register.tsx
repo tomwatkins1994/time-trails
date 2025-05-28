@@ -1,46 +1,64 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@/components/ui/card";
-import { TimeTrailsIcon } from "@/components/icons/time-trails-icon";
+import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TimeTrailsIcon } from "@/components/icons/time-trails-icon";
 import { useAppForm } from "@/hooks/useAppForm";
+import { authClient } from "@/lib/auth/client";
 
 export const Route = createFileRoute("/_auth/register")({
 	component: RouteComponent,
 });
 
+const SignUpSchema = z.object({
+	fullName: z.string().nonempty(),
+	email: z.string().email(),
+	password: z.string().min(8),
+	confirmPassword: z.string().min(8),
+});
+
 function RouteComponent() {
 	const form = useAppForm({
 		defaultValues: {
+			fullName: "",
 			email: "",
 			password: "",
 			confirmPassword: "",
 		},
 		validators: {
-			onChange: z
-				.object({
-					email: z.string().email(),
-					password: z.string().min(8),
-					confirmPassword: z.string().min(8),
-				})
-				.superRefine(({ password, confirmPassword }, ctx) => {
+			onChange: SignUpSchema.superRefine(
+				({ password, confirmPassword }, ctx) => {
 					if (password !== confirmPassword) {
 						ctx.addIssue({
 							code: "custom",
-							message: "The passwords did not match",
+							message: "The passwords do not match",
 							path: ["confirmPassword"],
 						});
 					}
-				}),
+				},
+			),
 		},
-		onSubmit: ({ value }) => {
-			// Do something with form data
-			alert(JSON.stringify(value, null, 2));
+		onSubmit: async ({ value }) => {
+			console.log(JSON.stringify(value, null, 2));
+			await saveUserMutation.mutateAsync(value);
+		},
+	});
+
+	const saveUserMutation = useMutation({
+		mutationFn: async ({
+			fullName,
+			email,
+			password,
+		}: z.infer<typeof SignUpSchema>) => {
+			const { data, error } = await authClient.signUp.email({
+				email,
+				name: fullName,
+				password,
+			});
+			if (error) {
+				throw Error(error.message);
+			}
+			return data;
 		},
 	});
 
@@ -59,6 +77,7 @@ function RouteComponent() {
 				<div className="flex justify-center mb-6 text-muted-foreground">
 					Register an account and begin exploring the UK today!
 				</div>
+
 				<form
 					className="space-y-4"
 					onSubmit={(e) => {
@@ -66,6 +85,15 @@ function RouteComponent() {
 						form.handleSubmit();
 					}}
 				>
+					{saveUserMutation.error ? (
+						<div className="text-red-500 flex justify-center">
+							{saveUserMutation.error.message}
+						</div>
+					) : null}
+					<form.AppField
+						name="fullName"
+						children={(field) => <field.TextField label="Full name" />}
+					/>
 					<form.AppField
 						name="email"
 						children={(field) => <field.TextField label="Email" />}
