@@ -3,8 +3,6 @@ import {
 	boolean,
 	timestamp,
 	pgTable,
-	unique,
-	uuid,
 	varchar,
 	uniqueIndex,
 	index,
@@ -13,7 +11,7 @@ import {
 export const user = pgTable(
 	"user",
 	{
-		id: uuid().primaryKey().defaultRandom(),
+		id: varchar().primaryKey(),
 		name: varchar().notNull(),
 		email: varchar().notNull(),
 		emailVerified: boolean(),
@@ -32,8 +30,8 @@ export const userRelations = relations(user, ({ many }) => ({
 export const session = pgTable(
 	"session",
 	{
-		id: uuid().primaryKey().defaultRandom(),
-		userId: uuid()
+		id: varchar().primaryKey(),
+		userId: varchar()
 			.notNull()
 			.references(() => user.id),
 		token: varchar().notNull(),
@@ -56,8 +54,8 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const account = pgTable(
 	"account",
 	{
-		id: uuid().primaryKey().defaultRandom(),
-		userId: uuid()
+		id: varchar().primaryKey(),
+		userId: varchar()
 			.notNull()
 			.references(() => user.id),
 		accountId: varchar().notNull(),
@@ -85,7 +83,7 @@ export const accountRelations = relations(account, ({ one }) => ({
 export const verification = pgTable(
 	"verification",
 	{
-		id: uuid().primaryKey().defaultRandom(),
+		id: varchar().primaryKey(),
 		identifier: varchar().notNull(),
 		value: varchar().notNull(),
 		expiresAt: timestamp(),

@@ -1,6 +1,6 @@
 CREATE TABLE "account" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
+	"id" varchar PRIMARY KEY NOT NULL,
+	"user_id" varchar NOT NULL,
 	"account_id" varchar NOT NULL,
 	"provider_id" varchar,
 	"access_token" varchar,
@@ -15,8 +15,8 @@ CREATE TABLE "account" (
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"user_id" uuid NOT NULL,
+	"id" varchar PRIMARY KEY NOT NULL,
+	"user_id" varchar NOT NULL,
 	"token" varchar NOT NULL,
 	"expires_at" timestamp,
 	"ip_address" varchar,
@@ -26,18 +26,17 @@ CREATE TABLE "session" (
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" varchar PRIMARY KEY NOT NULL,
 	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"email_verified" boolean,
 	"image" varchar,
 	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp,
-	CONSTRAINT "user_email_unique" UNIQUE("email")
+	"updated_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "verification" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" varchar PRIMARY KEY NOT NULL,
 	"identifier" varchar NOT NULL,
 	"value" varchar NOT NULL,
 	"expires_at" timestamp,
@@ -46,4 +45,9 @@ CREATE TABLE "verification" (
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "account_user_id_index" ON "account" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "session_user_id_index" ON "session" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "session_token_index" ON "session" USING btree ("token");--> statement-breakpoint
+CREATE UNIQUE INDEX "user_email_index" ON "user" USING btree ("email");--> statement-breakpoint
+CREATE INDEX "verification_identifier_index" ON "verification" USING btree ("identifier");

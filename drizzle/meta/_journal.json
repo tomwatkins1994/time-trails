@@ -47,15 +47,8 @@
     {
       "idx": 6,
       "version": "7",
-      "when": 1748467336300,
-      "tag": "0006_cold_bloodaxe",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "7",
-      "when": 1748467984447,
-      "tag": "0007_curious_toad_men",
+      "when": 1748472066635,
+      "tag": "0006_abnormal_wrecking_crew",
       "breakpoints": true
     }
   ]
