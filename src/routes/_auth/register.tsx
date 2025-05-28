@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,6 +18,7 @@ const SignUpSchema = z.object({
 });
 
 function RouteComponent() {
+	const navigate = useNavigate();
 	const form = useAppForm({
 		defaultValues: {
 			fullName: "",
@@ -49,15 +50,17 @@ function RouteComponent() {
 			email,
 			password,
 		}: z.infer<typeof SignUpSchema>) => {
-			const { data, error } = await authClient.signUp.email({
-				email,
-				name: fullName,
-				password,
-			});
+			const { error } = await authClient.signUp.email(
+				{
+					email,
+					name: fullName,
+					password,
+				},
+				{ onSuccess: () => navigate({ to: "/" }) },
+			);
 			if (error) {
 				throw Error(error.message);
 			}
-			return data;
 		},
 	});
 
