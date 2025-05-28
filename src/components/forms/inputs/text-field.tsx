@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFieldContext } from "@/hooks/useAppForm";
-import { FieldErrors } from "./field-errorts";
+import { FieldErrors } from "./field-errors";
 
 export function TextField({
 	label,
