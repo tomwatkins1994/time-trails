@@ -50,6 +50,13 @@
       "when": 1748467336300,
       "tag": "0006_cold_bloodaxe",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1748467984447,
+      "tag": "0007_curious_toad_men",
+      "breakpoints": true
     }
   ]
 }

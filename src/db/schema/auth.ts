@@ -6,6 +6,8 @@ import {
 	unique,
 	uuid,
 	varchar,
+	uniqueIndex,
+	index,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable(
@@ -19,7 +21,7 @@ export const user = pgTable(
 		createdAt: timestamp().defaultNow(),
 		updatedAt: timestamp(),
 	},
-	(t) => [unique().on(t.email)],
+	(t) => [uniqueIndex().on(t.email)],
 );
 
 export const userRelations = relations(user, ({ many }) => ({
@@ -27,18 +29,22 @@ export const userRelations = relations(user, ({ many }) => ({
 	accounts: many(account),
 }));
 
-export const session = pgTable("session", {
-	id: uuid().primaryKey().defaultRandom(),
-	userId: uuid()
-		.notNull()
-		.references(() => user.id),
-	token: varchar().notNull(),
-	expiresAt: timestamp(),
-	ipAddress: varchar(),
-	userAgent: varchar(),
-	createdAt: timestamp().defaultNow(),
-	updatedAt: timestamp(),
-});
+export const session = pgTable(
+	"session",
+	{
+		id: uuid().primaryKey().defaultRandom(),
+		userId: uuid()
+			.notNull()
+			.references(() => user.id),
+		token: varchar().notNull(),
+		expiresAt: timestamp(),
+		ipAddress: varchar(),
+		userAgent: varchar(),
+		createdAt: timestamp().defaultNow(),
+		updatedAt: timestamp(),
+	},
+	(t) => [index().on(t.userId), index().on(t.token)],
+);
 
 export const sessionRelations = relations(session, ({ one }) => ({
 	user: one(user, {
@@ -47,23 +53,27 @@ export const sessionRelations = relations(session, ({ one }) => ({
 	}),
 }));
 
-export const account = pgTable("account", {
-	id: uuid().primaryKey().defaultRandom(),
-	userId: uuid()
-		.notNull()
-		.references(() => user.id),
-	accountId: varchar().notNull(),
-	providerId: varchar(),
-	accessToken: varchar(),
-	refreshToken: varchar(),
-	accessTokenExpiresAte: timestamp(),
-	refreshTokenExpiresAt: timestamp(),
-	scope: varchar(),
-	idToken: varchar(),
-	password: varchar(),
-	createdAt: timestamp().defaultNow(),
-	updatedAt: timestamp(),
-});
+export const account = pgTable(
+	"account",
+	{
+		id: uuid().primaryKey().defaultRandom(),
+		userId: uuid()
+			.notNull()
+			.references(() => user.id),
+		accountId: varchar().notNull(),
+		providerId: varchar(),
+		accessToken: varchar(),
+		refreshToken: varchar(),
+		accessTokenExpiresAte: timestamp(),
+		refreshTokenExpiresAt: timestamp(),
+		scope: varchar(),
+		idToken: varchar(),
+		password: varchar(),
+		createdAt: timestamp().defaultNow(),
+		updatedAt: timestamp(),
+	},
+	(t) => [index().on(t.userId)],
+);
 
 export const accountRelations = relations(account, ({ one }) => ({
 	user: one(user, {
@@ -72,11 +82,15 @@ export const accountRelations = relations(account, ({ one }) => ({
 	}),
 }));
 
-export const verification = pgTable("verification", {
-	id: uuid().primaryKey().defaultRandom(),
-	identifier: varchar().notNull(),
-	value: varchar().notNull(),
-	expiresAt: timestamp(),
-	createdAt: timestamp().defaultNow(),
-	updatedAt: timestamp(),
-});
+export const verification = pgTable(
+	"verification",
+	{
+		id: uuid().primaryKey().defaultRandom(),
+		identifier: varchar().notNull(),
+		value: varchar().notNull(),
+		expiresAt: timestamp(),
+		createdAt: timestamp().defaultNow(),
+		updatedAt: timestamp(),
+	},
+	(t) => [index().on(t.identifier)],
+);
