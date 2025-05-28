@@ -9,9 +9,8 @@ export function FieldErrors() {
 
 	return (
 		<>
-			{field.state.meta.errors.map((error, i) => (
-				// biome-ignore lint/suspicious/noArrayIndexKey: Ignore for now, not many options
-				<div key={i} className="text-red-500">
+			{field.state.meta.errors.map((error) => (
+				<div key={error.message} className="text-red-500">
 					{error.message}
 				</div>
 			))}
