@@ -26,7 +26,7 @@ function RouteComponent() {
 			confirmPassword: "",
 		},
 		validators: {
-			onChange: SignUpSchema.superRefine(
+			onSubmit: SignUpSchema.superRefine(
 				({ password, confirmPassword }, ctx) => {
 					if (password !== confirmPassword) {
 						ctx.addIssue({
@@ -39,7 +39,6 @@ function RouteComponent() {
 			),
 		},
 		onSubmit: async ({ value }) => {
-			console.log(JSON.stringify(value, null, 2));
 			await saveUserMutation.mutateAsync(value);
 		},
 	});
