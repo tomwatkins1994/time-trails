@@ -3,6 +3,10 @@ import { NavBar } from "@/components/navbar";
 
 export const Route = createFileRoute("/_main")({
 	component: MainLayout,
+	loader: async ({ context: { queryClient, trpcQuery } }) => {
+		// Prefetch top-level so session info is available everywhere
+		await queryClient.prefetchQuery(trpcQuery.auth.getSession.queryOptions());
+	},
 });
 
 function MainLayout() {

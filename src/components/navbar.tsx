@@ -1,11 +1,10 @@
 import { Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/react";
+import { Suspense } from "react";
 import { ThemeSwitcher } from "./theme-switcher";
 import { TimeTrailsIcon } from "./icons/time-trails-icon";
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
-import { userSessionQueryOptions } from "@/lib/queries/user-session";
 import { Button } from "./ui/button";
-import { Suspense } from "react";
-import { authClient } from "@/lib/auth/client";
 
 export function NavBar() {
 	return (
@@ -27,7 +26,9 @@ export function NavBar() {
 				</div>
 			</div>
 			<div className="flex gap-2 items-center">
-				<UserDisplay />
+				<Suspense>
+					<UserDisplay />
+				</Suspense>
 				<ThemeSwitcher />
 			</div>
 		</nav>
@@ -35,15 +36,14 @@ export function NavBar() {
 }
 
 function UserDisplay() {
-	const session = authClient.useSession();
-
-	if (session.isPending) {
-		return null;
-	}
+	const trpc = useTRPC();
+	const { data: session } = useSuspenseQuery(
+		trpc.auth.getSession.queryOptions(),
+	);
 
 	if (!session) {
 		return <Button>Sign In</Button>;
 	}
 
-	return <>{session.data?.user.name}</>;
+	return <>{session.user.name}</>;
 }

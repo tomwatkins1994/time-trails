@@ -1,6 +1,12 @@
 import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
 import type { TRPCRouter } from "./router";
 import superjson from "superjson";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { getHeaders } from "@tanstack/react-start/server";
+
+const getIncomingHeaders = createIsomorphicFn()
+	.client(() => ({}))
+	.server(() => getHeaders());
 
 function getUrl() {
 	const base = (() => {
@@ -14,6 +20,7 @@ function getUrl() {
 export const trpcClient = createTRPCClient<TRPCRouter>({
 	links: [
 		httpBatchStreamLink({
+			headers: getIncomingHeaders(),
 			transformer: superjson,
 			url: getUrl(),
 		}),
