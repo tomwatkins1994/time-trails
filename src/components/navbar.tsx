@@ -1,6 +1,5 @@
 import { Link } from "@tanstack/react-router";
 import { Suspense } from "react";
-import { ThemeSwitcher } from "./theme-switcher";
 import { TimeTrailsIcon } from "./icons/time-trails-icon";
 import { LoggedInUser } from "./logged-in-user";
 
@@ -27,7 +26,6 @@ export function NavBar() {
 				<Suspense>
 					<LoggedInUser />
 				</Suspense>
-				<ThemeSwitcher />
 			</div>
 		</nav>
 	);
