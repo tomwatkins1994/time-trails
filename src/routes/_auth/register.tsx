@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_auth/register")({
 	component: RouteComponent,
 });
 
-const SignUpSchema = z.object({
+const RegisterSchema = z.object({
 	fullName: z.string().nonempty(),
 	email: z.string().email(),
 	password: z.string().min(8),
@@ -27,7 +27,7 @@ function RouteComponent() {
 			confirmPassword: "",
 		},
 		validators: {
-			onSubmit: SignUpSchema.superRefine(
+			onSubmit: RegisterSchema.superRefine(
 				({ password, confirmPassword }, ctx) => {
 					if (password !== confirmPassword) {
 						ctx.addIssue({
@@ -40,16 +40,16 @@ function RouteComponent() {
 			),
 		},
 		onSubmit: async ({ value }) => {
-			await saveUserMutation.mutateAsync(value);
+			await registerMutation.mutateAsync(value);
 		},
 	});
 
-	const saveUserMutation = useMutation({
+	const registerMutation = useMutation({
 		mutationFn: async ({
 			fullName,
 			email,
 			password,
-		}: z.infer<typeof SignUpSchema>) => {
+		}: z.infer<typeof RegisterSchema>) => {
 			const { error } = await authClient.signUp.email(
 				{
 					email,
@@ -87,9 +87,9 @@ function RouteComponent() {
 						form.handleSubmit();
 					}}
 				>
-					{saveUserMutation.error ? (
+					{registerMutation.error ? (
 						<div className="text-red-500 flex justify-center">
-							{saveUserMutation.error.message}
+							{registerMutation.error.message}
 						</div>
 					) : null}
 					<form.AppField
