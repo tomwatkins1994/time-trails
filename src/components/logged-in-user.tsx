@@ -13,8 +13,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { authClient } from "@/lib/auth/client";
+import { useNavigate } from "@tanstack/react-router";
 
 export function LoggedInUser() {
+	const navigate = useNavigate();
 	const trpc = useTRPC();
 	const { data: session } = useSuspenseQuery(
 		trpc.auth.getSession.queryOptions(),
@@ -59,7 +62,18 @@ export function LoggedInUser() {
 					<ThemeSwitcher />
 				</DropdownMenuItem>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>
+				<DropdownMenuItem
+					onClick={() => {
+						authClient.signOut(
+							{},
+							{
+								onSuccess: () => {
+									navigate({ to: "/login" });
+								},
+							},
+						);
+					}}
+				>
 					Log out
 					<DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
 				</DropdownMenuItem>
