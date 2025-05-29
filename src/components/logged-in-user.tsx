@@ -15,6 +15,7 @@ import {
 	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export function LoggedInUser() {
 	const trpc = useTRPC();
@@ -26,10 +27,18 @@ export function LoggedInUser() {
 		return <Button>Sign In</Button>;
 	}
 
+	const initials = session.user.name
+		.split(" ")
+		.map((w) => w[0]?.toUpperCase())
+		.join("");
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
-				<div>{session.user.name}</div>
+				<Avatar className="cursor-pointer">
+					{/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+					<AvatarFallback className="text-sm">{initials}</AvatarFallback>
+				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-56">
 				<DropdownMenuLabel>{session.user.name}</DropdownMenuLabel>
