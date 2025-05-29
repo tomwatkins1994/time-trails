@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -80,6 +80,12 @@ function RouteComponent() {
 					<form.AppForm>
 						<form.SubmitButton label="Login" className="w-full" />
 					</form.AppForm>
+					<div className="text-center">
+						Not got an account?{" "}
+						<Link to="/register" className="underline">
+							Register
+						</Link>
+					</div>
 				</form>
 			</CardContent>
 		</Card>
