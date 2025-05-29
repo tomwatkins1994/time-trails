@@ -24,7 +24,7 @@ export function LoggedInUser() {
 	);
 
 	if (!session) {
-		return <Button>Sign In</Button>;
+		return <Button onClick={() => navigate({ to: "/login" })}>Login</Button>;
 	}
 
 	const initials = session.user.name
