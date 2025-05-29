@@ -7,15 +7,12 @@ import {
 	DropdownMenuGroup,
 	DropdownMenuItem,
 	DropdownMenuLabel,
-	DropdownMenuPortal,
 	DropdownMenuSeparator,
 	DropdownMenuShortcut,
-	DropdownMenuSub,
-	DropdownMenuSubContent,
-	DropdownMenuSubTrigger,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 
 export function LoggedInUser() {
 	const trpc = useTRPC();
@@ -36,7 +33,7 @@ export function LoggedInUser() {
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
 				<Avatar className="cursor-pointer">
-					{/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+					{session.user.image ? <AvatarImage src={session.user.image} /> : null}
 					<AvatarFallback className="text-sm">{initials}</AvatarFallback>
 				</Avatar>
 			</DropdownMenuTrigger>
@@ -56,6 +53,11 @@ export function LoggedInUser() {
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>GitHub</DropdownMenuItem>
 				<DropdownMenuItem>Support</DropdownMenuItem>
+				<DropdownMenuSeparator />
+				<DropdownMenuItem className="flex justify-between">
+					<div>Theme</div>
+					<ThemeSwitcher />
+				</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem>
 					Log out
