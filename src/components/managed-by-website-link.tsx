@@ -1,5 +1,6 @@
 import type { UIEvent, ComponentProps } from "react";
 import ntIcon from "@/assets/national-trust.png";
+import ehIcon from "@/assets/english-heritage.png";
 import { cn } from "@/lib/utils";
 
 export interface ManagedByWebsiteLinkProps extends ComponentProps<"div"> {
@@ -7,6 +8,17 @@ export interface ManagedByWebsiteLinkProps extends ComponentProps<"div"> {
 	managerWebsiteUrl: string;
 	showText?: boolean;
 }
+
+const placeManagers = {
+	NATIONAL_TRUST: {
+		iconSrc: ntIcon,
+		linkText: "National Trust",
+	},
+	ENGLISH_HERITAGE: {
+		iconSrc: ehIcon,
+		linkText: "English Heritage",
+	},
+};
 
 export function ManagedByWebsiteLink({
 	className,
@@ -20,10 +32,10 @@ export function ManagedByWebsiteLink({
 		window.open(managerWebsiteUrl, "_blank");
 	};
 
-	const iconSrc = managedBy === "NATIONAL_TRUST" ? ntIcon : null;
-	if (!iconSrc) return null;
+	const { iconSrc, linkText } =
+		placeManagers[managedBy as keyof typeof placeManagers];
 
-	const linkText = managedBy === "NATIONAL_TRUST" ? "National Trust" : null;
+	if (!iconSrc) return null;
 
 	return (
 		<div
