@@ -33,7 +33,7 @@ export function PhotoCard({
 				<img src={imageUrl} alt="TODO" className="w-full rounded-t-xl" />
 			) : null}
 			<CardHeader>
-				<div className="flex gap-2 justify-between">
+				<div className="grid grid-cols-[auto_max-content] gap-2">
 					<div>
 						<CardTitle>{title}</CardTitle>
 						<CardDescription>{subTitle}</CardDescription>
