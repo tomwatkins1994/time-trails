@@ -14,7 +14,7 @@ export function ManagedByWebsiteLink({
 	managerWebsiteUrl,
 	showText,
 }: ManagedByWebsiteLinkProps) {
-	const openWebsite = (e: UIEvent<HTMLImageElement>) => {
+	const openWebsite = (e: UIEvent<HTMLDivElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
 		window.open(managerWebsiteUrl, "_blank");
@@ -31,14 +31,10 @@ export function ManagedByWebsiteLink({
 				"flex gap-2 items-center cursor-pointer hover:underline hover:font-bold",
 				className,
 			)}
+			onClick={openWebsite}
+			onKeyUp={openWebsite}
 		>
-			<img
-				src={iconSrc}
-				alt="Go to website"
-				className="size-10"
-				onClick={openWebsite}
-				onKeyUp={openWebsite}
-			/>
+			<img src={iconSrc} alt="Go to website" className="size-10" />
 			{showText ? (
 				<span className="font-[Cinzel] text-md font-semibold">
 					View on {linkText} website
