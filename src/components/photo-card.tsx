@@ -30,7 +30,11 @@ export function PhotoCard({
 	return (
 		<Card className={cn("pt-0 gap-4 pb-4", className)}>
 			{imageUrl ? (
-				<img src={imageUrl} alt="TODO" className="w-full rounded-t-xl" />
+				<img
+					src={imageUrl}
+					alt="TODO"
+					className="max-h-[300px] min-w-full md:h-[200px] overflow-hidden rounded-t-xl"
+				/>
 			) : null}
 			<CardHeader>
 				<div className="grid grid-cols-[auto_max-content] gap-2">
