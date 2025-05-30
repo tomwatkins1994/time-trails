@@ -67,9 +67,14 @@ function RouteComponent() {
 	return (
 		<Card className="w-full max-w-[600px]">
 			<CardHeader>
-				<CardTitle className="flex justify-center items-center gap-2 text-2xl md:text-3xl font-medium font-[Cinzel]">
-					<TimeTrailsIcon className="h-10 md:h-12" />
-					Time Trails
+				<CardTitle className="flex justify-center">
+					<Link
+						to="/"
+						className="flex items-center gap-2 text-2xl md:text-3xl font-medium font-[Cinzel]"
+					>
+						<TimeTrailsIcon className="h-10 md:h-12" />
+						Time Trails
+					</Link>
 				</CardTitle>
 			</CardHeader>
 			<CardContent>
