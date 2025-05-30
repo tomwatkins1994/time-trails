@@ -1,16 +1,16 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { upsertPlaces } from "./upsert-places";
-import { nationalTrustMockServer } from "test/mocks/national-trust/server";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+import { englishHeritageMockServer } from "test/mocks/english-heritage/server";
 
 describe("upsertPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen();
+		englishHeritageMockServer.listen();
 	});
 
 	afterAll(() => {
-		nationalTrustMockServer.close();
+		englishHeritageMockServer.close();
 	});
 
 	it("Should get places data and add it to the database", async () => {
