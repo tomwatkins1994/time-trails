@@ -6,7 +6,10 @@ import { getHeaders } from "@tanstack/react-start/server";
 
 const getIncomingHeaders = createIsomorphicFn()
 	.client(() => ({}))
-	.server(() => getHeaders());
+	.server(() => {
+		const headers = getHeaders();
+		return headers;
+	});
 
 function getUrl() {
 	const base = (() => {
