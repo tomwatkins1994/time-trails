@@ -1,0 +1,1 @@
+ALTER TYPE "public"."place_manager" ADD VALUE 'ENGLISH_HERITAGE';

@@ -1,6 +1,9 @@
 import { pgEnum, pgTable, unique, uuid, varchar } from "drizzle-orm/pg-core";
 
-export const placeManager = pgEnum("place_manager", ["NATIONAL_TRUST"]);
+export const placeManager = pgEnum("place_manager", [
+	"NATIONAL_TRUST",
+	"ENGLISH_HERITAGE",
+]);
 
 export const places = pgTable(
 	"places",
