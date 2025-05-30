@@ -47,7 +47,13 @@ export function LoggedInUser() {
 					<DropdownMenuItem>Settings</DropdownMenuItem>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
-				<DropdownMenuItem>GitHub</DropdownMenuItem>
+				<a
+					href="https://github.com/tomwatkins1994/time-trails"
+					target="_blank"
+					rel="noreferrer"
+				>
+					<DropdownMenuItem>GitHub</DropdownMenuItem>
+				</a>
 				<DropdownMenuItem>Support</DropdownMenuItem>
 				<DropdownMenuSeparator />
 				<DropdownMenuItem className="flex justify-between">
