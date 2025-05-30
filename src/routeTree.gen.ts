@@ -14,9 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as MainRouteImport } from './routes/_main/route'
 import { Route as AuthRouteImport } from './routes/_auth/route'
 import { Route as MainIndexImport } from './routes/_main/index'
-import { Route as MainPlacesImport } from './routes/_main/places'
 import { Route as AuthRegisterImport } from './routes/_auth/register'
 import { Route as AuthLoginImport } from './routes/_auth/login'
+import { Route as MainPlacesIndexImport } from './routes/_main/places.index'
 import { Route as MainPlacesIdImport } from './routes/_main/places.$id'
 
 // Create/Update Routes
@@ -37,12 +37,6 @@ const MainIndexRoute = MainIndexImport.update({
   getParentRoute: () => MainRouteRoute,
 } as any)
 
-const MainPlacesRoute = MainPlacesImport.update({
-  id: '/places',
-  path: '/places',
-  getParentRoute: () => MainRouteRoute,
-} as any)
-
 const AuthRegisterRoute = AuthRegisterImport.update({
   id: '/register',
   path: '/register',
@@ -55,10 +49,16 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
+const MainPlacesIndexRoute = MainPlacesIndexImport.update({
+  id: '/places/',
+  path: '/places/',
+  getParentRoute: () => MainRouteRoute,
+} as any)
+
 const MainPlacesIdRoute = MainPlacesIdImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => MainPlacesRoute,
+  id: '/places/$id',
+  path: '/places/$id',
+  getParentRoute: () => MainRouteRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -93,13 +93,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRegisterImport
       parentRoute: typeof AuthRouteImport
     }
-    '/_main/places': {
-      id: '/_main/places'
-      path: '/places'
-      fullPath: '/places'
-      preLoaderRoute: typeof MainPlacesImport
-      parentRoute: typeof MainRouteImport
-    }
     '/_main/': {
       id: '/_main/'
       path: '/'
@@ -109,10 +102,17 @@ declare module '@tanstack/react-router' {
     }
     '/_main/places/$id': {
       id: '/_main/places/$id'
-      path: '/$id'
+      path: '/places/$id'
       fullPath: '/places/$id'
       preLoaderRoute: typeof MainPlacesIdImport
-      parentRoute: typeof MainPlacesImport
+      parentRoute: typeof MainRouteImport
+    }
+    '/_main/places/': {
+      id: '/_main/places/'
+      path: '/places'
+      fullPath: '/places'
+      preLoaderRoute: typeof MainPlacesIndexImport
+      parentRoute: typeof MainRouteImport
     }
   }
 }
@@ -133,26 +133,16 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface MainPlacesRouteChildren {
-  MainPlacesIdRoute: typeof MainPlacesIdRoute
-}
-
-const MainPlacesRouteChildren: MainPlacesRouteChildren = {
-  MainPlacesIdRoute: MainPlacesIdRoute,
-}
-
-const MainPlacesRouteWithChildren = MainPlacesRoute._addFileChildren(
-  MainPlacesRouteChildren,
-)
-
 interface MainRouteRouteChildren {
-  MainPlacesRoute: typeof MainPlacesRouteWithChildren
   MainIndexRoute: typeof MainIndexRoute
+  MainPlacesIdRoute: typeof MainPlacesIdRoute
+  MainPlacesIndexRoute: typeof MainPlacesIndexRoute
 }
 
 const MainRouteRouteChildren: MainRouteRouteChildren = {
-  MainPlacesRoute: MainPlacesRouteWithChildren,
   MainIndexRoute: MainIndexRoute,
+  MainPlacesIdRoute: MainPlacesIdRoute,
+  MainPlacesIndexRoute: MainPlacesIndexRoute,
 }
 
 const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
@@ -163,18 +153,18 @@ export interface FileRoutesByFullPath {
   '': typeof MainRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/places': typeof MainPlacesRouteWithChildren
   '/': typeof MainIndexRoute
   '/places/$id': typeof MainPlacesIdRoute
+  '/places': typeof MainPlacesIndexRoute
 }
 
 export interface FileRoutesByTo {
   '': typeof AuthRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/register': typeof AuthRegisterRoute
-  '/places': typeof MainPlacesRouteWithChildren
   '/': typeof MainIndexRoute
   '/places/$id': typeof MainPlacesIdRoute
+  '/places': typeof MainPlacesIndexRoute
 }
 
 export interface FileRoutesById {
@@ -183,25 +173,25 @@ export interface FileRoutesById {
   '/_main': typeof MainRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/register': typeof AuthRegisterRoute
-  '/_main/places': typeof MainPlacesRouteWithChildren
   '/_main/': typeof MainIndexRoute
   '/_main/places/$id': typeof MainPlacesIdRoute
+  '/_main/places/': typeof MainPlacesIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/register' | '/places' | '/' | '/places/$id'
+  fullPaths: '' | '/login' | '/register' | '/' | '/places/$id' | '/places'
   fileRoutesByTo: FileRoutesByTo
-  to: '' | '/login' | '/register' | '/places' | '/' | '/places/$id'
+  to: '' | '/login' | '/register' | '/' | '/places/$id' | '/places'
   id:
     | '__root__'
     | '/_auth'
     | '/_main'
     | '/_auth/login'
     | '/_auth/register'
-    | '/_main/places'
     | '/_main/'
     | '/_main/places/$id'
+    | '/_main/places/'
   fileRoutesById: FileRoutesById
 }
 
@@ -239,8 +229,9 @@ export const routeTree = rootRoute
     "/_main": {
       "filePath": "_main/route.tsx",
       "children": [
-        "/_main/places",
-        "/_main/"
+        "/_main/",
+        "/_main/places/$id",
+        "/_main/places/"
       ]
     },
     "/_auth/login": {
@@ -251,20 +242,17 @@ export const routeTree = rootRoute
       "filePath": "_auth/register.tsx",
       "parent": "/_auth"
     },
-    "/_main/places": {
-      "filePath": "_main/places.tsx",
-      "parent": "/_main",
-      "children": [
-        "/_main/places/$id"
-      ]
-    },
     "/_main/": {
       "filePath": "_main/index.tsx",
       "parent": "/_main"
     },
     "/_main/places/$id": {
       "filePath": "_main/places.$id.tsx",
-      "parent": "/_main/places"
+      "parent": "/_main"
+    },
+    "/_main/places/": {
+      "filePath": "_main/places.index.tsx",
+      "parent": "/_main"
     }
   }
 }
