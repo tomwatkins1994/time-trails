@@ -34,7 +34,7 @@ export function LoggedInUser() {
 
 	return (
 		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
+			<DropdownMenuTrigger className="size-10" asChild>
 				<Avatar className="cursor-pointer">
 					{session.user.image ? <AvatarImage src={session.user.image} /> : null}
 					<AvatarFallback className="text-sm">{initials}</AvatarFallback>
