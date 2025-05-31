@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
 import { SearchBox } from "@/components/search-box";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_main/places/")({
 	component: Home,
@@ -20,7 +22,7 @@ export const Route = createFileRoute("/_main/places/")({
 	}),
 	loaderDeps: ({ search }) => ({
 		...search,
-		managedBy: search.managedBy?.split(","),
+		managedBy: search.managedBy?.split(",") || [],
 	}),
 	loader: async ({ context: { queryClient, trpcQuery }, deps }) => {
 		console.log({ deps });
@@ -43,12 +45,24 @@ const navigateOptions = linkOptions({
 	replace: true,
 });
 
+const managedByOptions = [
+	{
+		name: "NATIONAL_TRUST",
+		displayName: "National Trust",
+	},
+	{
+		name: "ENGLISH_HERITAGE",
+		displayName: "English Heritage",
+	},
+];
+
 function Home() {
 	const deps = Route.useLoaderDeps();
 	const navigate = Route.useNavigate();
 
 	const trpc = useTRPC();
 	const [submittedSearchValue, setSubmittedSearchValue] = useState(deps.name);
+	const [managedByFilter, setManagedByFilter] = useState(deps.managedBy);
 	const {
 		data: places,
 		fetchNextPage,
@@ -74,7 +88,26 @@ function Home() {
 			setSubmittedSearchValue(searchValue);
 			navigate({
 				...navigateOptions,
-				search: () => ({ name: searchValue || undefined }),
+				search: (existing) => ({
+					...existing,
+					name: searchValue || undefined,
+					pages: undefined,
+				}),
+			});
+		},
+		[navigate],
+	);
+
+	const changeManagedByFilter = useCallback(
+		(newFilter: string[]) => {
+			setManagedByFilter(newFilter);
+			navigate({
+				...navigateOptions,
+				search: (existing) => ({
+					...existing,
+					managedBy: newFilter.join(",") || undefined,
+					pages: undefined,
+				}),
 			});
 		},
 		[navigate],
@@ -93,7 +126,25 @@ function Home() {
 					<CardHeader>
 						<CardTitle>Filter</CardTitle>
 					</CardHeader>
-					{/* <CardContent></CardContent> */}
+					<CardContent>
+						<div className="space-y-2">
+							{managedByOptions.map(({ name, displayName }) => (
+								<div key={name} className="flex gap-2">
+									<Checkbox
+										id={name}
+										checked={managedByFilter.includes(name)}
+										onCheckedChange={(checked) => {
+											const newManagedByFilter = checked
+												? [...managedByFilter, name]
+												: managedByFilter.filter((value) => value !== name);
+											changeManagedByFilter(newManagedByFilter);
+										}}
+									/>
+									<Label htmlFor={name}>{displayName}</Label>
+								</div>
+							))}
+						</div>
+					</CardContent>
 				</Card>
 				<div className="flex flex-col gap-4 flex-1">
 					<CardLayoutGrid>
