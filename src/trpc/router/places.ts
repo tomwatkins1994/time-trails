@@ -22,16 +22,21 @@ export const placesRouter = {
 				search: z
 					.object({
 						name: z.string().nullable().optional(),
+						managedBy: z.string().array().optional(),
 					})
 					.optional(),
 			}),
 		)
 		.query(async ({ input: { cursor, limit, search } }) => {
 			const places = await db.query.places.findMany({
-				where: (t, { and, gte, ilike }) =>
+				where: (t, { and, gte, ilike, inArray }) =>
 					and(
 						cursor ? gte(t.id, cursor) : undefined,
 						search?.name ? ilike(t.name, `%${search.name}%`) : undefined,
+						search?.managedBy
+							? // biome-ignore lint/suspicious/noExplicitAny: Will deal with enum issue later
+								inArray(t.managedBy, search.managedBy as any)
+							: undefined,
 					),
 				orderBy: (t, { asc }) => asc(t.id),
 				limit: limit + 1,

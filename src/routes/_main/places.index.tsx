@@ -31,6 +31,7 @@ export const Route = createFileRoute("/_main/places/")({
 				cursor: null,
 				search: {
 					name: deps.name,
+					managedBy: deps.managedBy,
 				},
 			}),
 			pages: deps.pages,
@@ -74,6 +75,7 @@ function Home() {
 				cursor: null,
 				search: {
 					name: submittedSearchValue,
+					managedBy: managedByFilter,
 				},
 			},
 			{
