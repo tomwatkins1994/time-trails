@@ -33,7 +33,7 @@ export const placesRouter = {
 					and(
 						cursor ? gte(t.id, cursor) : undefined,
 						search?.name ? ilike(t.name, `%${search.name}%`) : undefined,
-						search?.managedBy
+						search?.managedBy && search.managedBy.length > 0
 							? // biome-ignore lint/suspicious/noExplicitAny: Will deal with enum issue later
 								inArray(t.managedBy, search.managedBy as any)
 							: undefined,
