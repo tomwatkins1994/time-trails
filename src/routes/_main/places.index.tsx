@@ -127,34 +127,36 @@ function Home() {
 				<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
 			</div>
 			<div className="flex gap-4 w-full">
-				<Card className="w-[250px]">
-					<CardHeader>
-						<CardTitle>Filter</CardTitle>
-					</CardHeader>
-					<CardContent className="font-[Cinzel]">
-						<div className="space-y-2">
-							<div className="font-semibold">Managed by</div>
-							{managedByOptions.map(({ name, displayName, icon }) => (
-								<div key={name} className="flex gap-2 items-center">
-									<Checkbox
-										id={name}
-										checked={managedByFilter.includes(name)}
-										onCheckedChange={(checked) => {
-											const newManagedByFilter = checked
-												? [...managedByFilter, name]
-												: managedByFilter.filter((value) => value !== name);
-											changeManagedByFilter(newManagedByFilter);
-										}}
-									/>
-									<Label htmlFor={name}>
-										<img src={icon} className="size-8" alt={displayName} />
-										{displayName}
-									</Label>
-								</div>
-							))}
-						</div>
-					</CardContent>
-				</Card>
+				<div>
+					<Card className="w-[250px]">
+						<CardHeader>
+							<CardTitle>Filter</CardTitle>
+						</CardHeader>
+						<CardContent className="font-[Cinzel]">
+							<div className="space-y-2">
+								<div className="font-semibold">Managed by</div>
+								{managedByOptions.map(({ name, displayName, icon }) => (
+									<div key={name} className="flex gap-2 items-center">
+										<Checkbox
+											id={name}
+											checked={managedByFilter.includes(name)}
+											onCheckedChange={(checked) => {
+												const newManagedByFilter = checked
+													? [...managedByFilter, name]
+													: managedByFilter.filter((value) => value !== name);
+												changeManagedByFilter(newManagedByFilter);
+											}}
+										/>
+										<Label htmlFor={name}>
+											<img src={icon} className="size-8" alt={displayName} />
+											{displayName}
+										</Label>
+									</div>
+								))}
+							</div>
+						</CardContent>
+					</Card>
+				</div>
 				<div className="flex flex-col gap-4 flex-1">
 					<CardLayoutGrid>
 						{places?.pages.map((page) =>
