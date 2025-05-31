@@ -25,7 +25,6 @@ export const Route = createFileRoute("/_main/places/")({
 		managedBy: search.managedBy?.split(",") || [],
 	}),
 	loader: async ({ context: { queryClient, trpcQuery }, deps }) => {
-		console.log({ deps });
 		await queryClient.prefetchInfiniteQuery({
 			...trpcQuery.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
