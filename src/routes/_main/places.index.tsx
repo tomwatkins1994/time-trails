@@ -9,15 +9,21 @@ import { CardLayoutGrid } from "@/components/card-layout-grid";
 import { Button } from "@/components/ui/button";
 import { CircleLoader } from "@/components/loaders/circle-loader";
 import { SearchBox } from "@/components/search-box";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const Route = createFileRoute("/_main/places/")({
 	component: Home,
 	validateSearch: z.object({
 		pages: z.number().optional().default(1),
 		name: z.string().optional(),
+		managedBy: z.string().optional(),
 	}),
-	loaderDeps: ({ search }) => ({ ...search }),
+	loaderDeps: ({ search }) => ({
+		...search,
+		managedBy: search.managedBy?.split(","),
+	}),
 	loader: async ({ context: { queryClient, trpcQuery }, deps }) => {
+		console.log({ deps });
 		await queryClient.prefetchInfiniteQuery({
 			...trpcQuery.places.infiniteList.infiniteQueryOptions({
 				cursor: null,
@@ -76,49 +82,66 @@ function Home() {
 
 	return (
 		<div className="flex flex-col gap-4">
-			<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
-			<CardLayoutGrid>
-				{places?.pages.map((page) =>
-					page.items.map((place) => (
-						<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
-							<PhotoCard
-								className="h-full"
-								imageUrl={place.imageUrl}
-								title={place.name}
-								subTitle={[place.town, place.county].filter(Boolean).join(", ")}
-								description={place.description}
-								managedBy={place.managedBy}
-								managerWebsiteUrl={place.managerWebsiteUrl}
-							/>
-						</Link>
-					)),
-				)}
-			</CardLayoutGrid>
-			{isFetchingNextPage ? (
-				<div className="w-full flex justify-center">
-					<CircleLoader />
+			<div className="flex justify-between items-center">
+				<div className="font-[Cinzel] text-xl font-semibold px-6">
+					Places Found:
 				</div>
-			) : null}
-			{hasNextPage && !isFetchingNextPage ? (
-				<div className="w-full flex justify-center">
-					<Button
-						type="button"
-						disabled={isFetchingNextPage}
-						onClick={async () => {
-							await fetchNextPage();
-							navigate({
-								...navigateOptions,
-								search: (existing) => ({
-									...existing,
-									pages: (places?.pages.length ?? 0) + 1,
-								}),
-							});
-						}}
-					>
-						Load More
-					</Button>
+				<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
+			</div>
+			<div className="flex gap-4 w-full">
+				<Card className="w-[250px]">
+					<CardHeader>
+						<CardTitle>Filter</CardTitle>
+					</CardHeader>
+					{/* <CardContent></CardContent> */}
+				</Card>
+				<div className="flex flex-col gap-4 flex-1">
+					<CardLayoutGrid>
+						{places?.pages.map((page) =>
+							page.items.map((place) => (
+								<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
+									<PhotoCard
+										className="h-full"
+										imageUrl={place.imageUrl}
+										title={place.name}
+										subTitle={[place.town, place.county]
+											.filter(Boolean)
+											.join(", ")}
+										description={place.description}
+										managedBy={place.managedBy}
+										managerWebsiteUrl={place.managerWebsiteUrl}
+									/>
+								</Link>
+							)),
+						)}
+					</CardLayoutGrid>
+					{isFetchingNextPage ? (
+						<div className="w-full flex justify-center">
+							<CircleLoader />
+						</div>
+					) : null}
+					{hasNextPage && !isFetchingNextPage ? (
+						<div className="w-full flex justify-center">
+							<Button
+								type="button"
+								disabled={isFetchingNextPage}
+								onClick={async () => {
+									await fetchNextPage();
+									navigate({
+										...navigateOptions,
+										search: (existing) => ({
+											...existing,
+											pages: (places?.pages.length ?? 0) + 1,
+										}),
+									});
+								}}
+							>
+								Load More
+							</Button>
+						</div>
+					) : null}
 				</div>
-			) : null}
+			</div>
 		</div>
 	);
 }
