@@ -12,6 +12,8 @@ import { SearchBox } from "@/components/search-box";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import ntIcon from "@/assets/national-trust.png";
+import ehIcon from "@/assets/english-heritage.png";
 
 export const Route = createFileRoute("/_main/places/")({
 	component: Home,
@@ -49,10 +51,12 @@ const managedByOptions = [
 	{
 		name: "NATIONAL_TRUST",
 		displayName: "National Trust",
+		icon: ntIcon,
 	},
 	{
 		name: "ENGLISH_HERITAGE",
 		displayName: "English Heritage",
+		icon: ehIcon,
 	},
 ];
 
@@ -127,10 +131,11 @@ function Home() {
 					<CardHeader>
 						<CardTitle>Filter</CardTitle>
 					</CardHeader>
-					<CardContent>
+					<CardContent className="font-[Cinzel]">
 						<div className="space-y-2">
-							{managedByOptions.map(({ name, displayName }) => (
-								<div key={name} className="flex gap-2">
+							<div className="font-semibold">Managed by</div>
+							{managedByOptions.map(({ name, displayName, icon }) => (
+								<div key={name} className="flex gap-2 items-center">
 									<Checkbox
 										id={name}
 										checked={managedByFilter.includes(name)}
@@ -141,7 +146,10 @@ function Home() {
 											changeManagedByFilter(newManagedByFilter);
 										}}
 									/>
-									<Label htmlFor={name}>{displayName}</Label>
+									<Label htmlFor={name}>
+										<img src={icon} className="size-8" alt={displayName} />
+										{displayName}
+									</Label>
 								</div>
 							))}
 						</div>
