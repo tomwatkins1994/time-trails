@@ -120,7 +120,7 @@ function Home() {
 	);
 
 	return (
-		<div className="grid grid-cols-[250px_auto] gap-4 h-full">
+		<div className="grid grid-cols-[250px_auto] grid-rows-[max-content_auto] gap-4 h-full">
 			<div className="flex justify-between items-center col-span-2">
 				<div className="font-[Cinzel] text-xl font-semibold px-6">
 					{resultsFound > 0
