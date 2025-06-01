@@ -12,10 +12,10 @@ export const Route = createFileRoute("/_main")({
 function MainLayout() {
 	return (
 		<>
-			<header className="sticky top-0 p-4 md:px-8 bg-background">
+			<header className="sticky top-0 p-4 md:px-8 bg-background h-[72px]">
 				<NavBar />
 			</header>
-			<main className="p-4 md:px-8 md:py-6">
+			<main className="p-4 md:px-8 md:py-6 h-[calc(100vh-72px)]">
 				<Outlet />
 			</main>
 		</>

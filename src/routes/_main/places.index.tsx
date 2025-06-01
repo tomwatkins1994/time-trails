@@ -119,90 +119,88 @@ function Home() {
 	);
 
 	return (
-		<div className="flex flex-col gap-4">
-			<div className="flex justify-between items-center">
+		<div className="grid grid-cols-[250px_auto] gap-4 h-full">
+			<div className="flex justify-between items-center col-span-2">
 				<div className="font-[Cinzel] text-xl font-semibold px-6">
 					Places Found:
 				</div>
 				<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
 			</div>
-			<div className="flex gap-4 w-full">
-				<div>
-					<Card className="w-[250px]">
-						<CardHeader>
-							<CardTitle>Filter</CardTitle>
-						</CardHeader>
-						<CardContent className="font-[Cinzel]">
-							<div className="space-y-2">
-								<div className="font-semibold">Managed by</div>
-								{managedByOptions.map(({ name, displayName, icon }) => (
-									<div key={name} className="flex gap-2 items-center">
-										<Checkbox
-											id={name}
-											checked={managedByFilter.includes(name)}
-											onCheckedChange={(checked) => {
-												const newManagedByFilter = checked
-													? [...managedByFilter, name]
-													: managedByFilter.filter((value) => value !== name);
-												changeManagedByFilter(newManagedByFilter);
-											}}
-										/>
-										<Label htmlFor={name}>
-											<img src={icon} className="size-8" alt={displayName} />
-											{displayName}
-										</Label>
-									</div>
-								))}
-							</div>
-						</CardContent>
-					</Card>
-				</div>
-				<div className="flex flex-col gap-4 flex-1">
-					<CardLayoutGrid>
-						{places?.pages.map((page) =>
-							page.items.map((place) => (
-								<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
-									<PhotoCard
-										className="h-full"
-										imageUrl={place.imageUrl}
-										title={place.name}
-										subTitle={[place.town, place.county]
-											.filter(Boolean)
-											.join(", ")}
-										description={place.description}
-										managedBy={place.managedBy}
-										managerWebsiteUrl={place.managerWebsiteUrl}
+			<div>
+				<Card>
+					<CardHeader>
+						<CardTitle>Filter</CardTitle>
+					</CardHeader>
+					<CardContent className="font-[Cinzel]">
+						<div className="space-y-2">
+							<div className="font-semibold">Managed by</div>
+							{managedByOptions.map(({ name, displayName, icon }) => (
+								<div key={name} className="flex gap-2 items-center">
+									<Checkbox
+										id={name}
+										checked={managedByFilter.includes(name)}
+										onCheckedChange={(checked) => {
+											const newManagedByFilter = checked
+												? [...managedByFilter, name]
+												: managedByFilter.filter((value) => value !== name);
+											changeManagedByFilter(newManagedByFilter);
+										}}
 									/>
-								</Link>
-							)),
-						)}
-					</CardLayoutGrid>
-					{isFetchingNextPage ? (
-						<div className="w-full flex justify-center">
-							<CircleLoader />
+									<Label htmlFor={name}>
+										<img src={icon} className="size-8" alt={displayName} />
+										{displayName}
+									</Label>
+								</div>
+							))}
 						</div>
-					) : null}
-					{hasNextPage && !isFetchingNextPage ? (
-						<div className="w-full flex justify-center">
-							<Button
-								type="button"
-								disabled={isFetchingNextPage}
-								onClick={async () => {
-									await fetchNextPage();
-									navigate({
-										...navigateOptions,
-										search: (existing) => ({
-											...existing,
-											pages: (places?.pages.length ?? 0) + 1,
-										}),
-									});
-								}}
-							>
-								Load More
-							</Button>
-						</div>
-					) : null}
-				</div>
+					</CardContent>
+				</Card>
+			</div>
+			<div className="flex flex-col gap-4 overflow-auto pr-4">
+				<CardLayoutGrid>
+					{places?.pages.map((page) =>
+						page.items.map((place) => (
+							<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
+								<PhotoCard
+									className="h-full"
+									imageUrl={place.imageUrl}
+									title={place.name}
+									subTitle={[place.town, place.county]
+										.filter(Boolean)
+										.join(", ")}
+									description={place.description}
+									managedBy={place.managedBy}
+									managerWebsiteUrl={place.managerWebsiteUrl}
+								/>
+							</Link>
+						)),
+					)}
+				</CardLayoutGrid>
+				{isFetchingNextPage ? (
+					<div className="w-full flex justify-center">
+						<CircleLoader />
+					</div>
+				) : null}
+				{hasNextPage && !isFetchingNextPage ? (
+					<div className="w-full flex justify-center">
+						<Button
+							type="button"
+							disabled={isFetchingNextPage}
+							onClick={async () => {
+								await fetchNextPage();
+								navigate({
+									...navigateOptions,
+									search: (existing) => ({
+										...existing,
+										pages: (places?.pages.length ?? 0) + 1,
+									}),
+								});
+							}}
+						>
+							Load More
+						</Button>
+					</div>
+				) : null}
 			</div>
 		</div>
 	);
