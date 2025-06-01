@@ -38,7 +38,7 @@ export const placesRouter = {
 								inArray(t.managedBy, search.managedBy as any)
 							: undefined,
 					),
-				orderBy: (t, { asc }) => asc(t.name),
+				orderBy: (t, { asc }) => asc(t.id),
 				limit: limit + 1,
 			});
 
