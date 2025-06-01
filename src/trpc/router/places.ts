@@ -1,8 +1,8 @@
 import { z } from "zod";
+import { and, ilike, inArray, gte } from "drizzle-orm";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
-import * as schema from "@/db/schema";
-import { and, ilike, inArray } from "drizzle-orm";
+import { places } from "@/db/schema";
 
 export const placesRouter = {
 	getById: publicProcedure
@@ -31,32 +31,30 @@ export const placesRouter = {
 		)
 		.query(async ({ input: { cursor, limit, search } }) => {
 			const baseFilter = and(
-				search?.name
-					? ilike(schema.places.name, `%${search.name}%`)
-					: undefined,
+				search?.name ? ilike(places.name, `%${search.name}%`) : undefined,
 				search?.managedBy && search.managedBy.length > 0
 					? // biome-ignore lint/suspicious/noExplicitAny: Will deal with enum issue later
-						inArray(schema.places.managedBy, search.managedBy as any)
+						inArray(places.managedBy, search.managedBy as any)
 					: undefined,
 			);
 
-			const places = await db.query.places.findMany({
-				where: (t, { and, gte }) =>
-					and(cursor ? gte(t.id, cursor) : undefined, baseFilter),
-				orderBy: (t, { asc }) => asc(t.id),
-				limit: limit + 1,
-			});
-
-			const count = await db.$count(schema.places, baseFilter);
+			const [items, count] = await Promise.all([
+				db.query.places.findMany({
+					where: (t) => and(cursor ? gte(t.id, cursor) : undefined, baseFilter),
+					orderBy: (t, { asc }) => asc(t.id),
+					limit: limit + 1,
+				}),
+				db.$count(places, baseFilter),
+			]);
 
 			let nextCursor: typeof cursor | null = null;
-			if (places.length > limit) {
-				const nextPlace = places.pop();
+			if (items.length > limit) {
+				const nextPlace = items.pop();
 				nextCursor = nextPlace?.id ?? null;
 			}
 
 			return {
-				items: places,
+				items,
 				count,
 				nextCursor,
 			};
