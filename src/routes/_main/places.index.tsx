@@ -160,7 +160,12 @@ function Home() {
 				<CardLayoutGrid>
 					{places?.pages.map((page) =>
 						page.items.map((place) => (
-							<Link key={place.id} to="/places/$id" params={{ id: place.id }}>
+							<Link
+								key={place.id}
+								to="/places/$id"
+								params={{ id: place.id }}
+								viewTransition
+							>
 								<PhotoCard
 									className="h-full"
 									imageUrl={place.imageUrl}
