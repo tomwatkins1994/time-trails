@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
+import * as schema from "@/db/schema";
+import { and, ilike, inArray } from "drizzle-orm";
 
 export const placesRouter = {
 	getById: publicProcedure
@@ -42,6 +44,19 @@ export const placesRouter = {
 				limit: limit + 1,
 			});
 
+			const count = await db.$count(
+				schema.places,
+				and(
+					search?.name
+						? ilike(schema.places.name, `%${search.name}%`)
+						: undefined,
+					search?.managedBy && search.managedBy.length > 0
+						? // biome-ignore lint/suspicious/noExplicitAny: Will deal with enum issue later
+							inArray(schema.places.managedBy, search.managedBy as any)
+						: undefined,
+				),
+			);
+
 			let nextCursor: typeof cursor | null = null;
 			if (places.length > limit) {
 				const nextPlace = places.pop();
@@ -50,6 +65,7 @@ export const placesRouter = {
 
 			return {
 				items: places,
+				count,
 				nextCursor,
 			};
 		}),

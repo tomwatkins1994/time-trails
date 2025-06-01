@@ -87,6 +87,7 @@ function Home() {
 			},
 		),
 	);
+	const resultsFound = places.pages[0]?.count || 0;
 
 	const submitSearch = useCallback(
 		(searchValue: string) => {
@@ -122,7 +123,9 @@ function Home() {
 		<div className="grid grid-cols-[250px_auto] gap-4 h-full">
 			<div className="flex justify-between items-center col-span-2">
 				<div className="font-[Cinzel] text-xl font-semibold px-6">
-					Places Found:
+					{resultsFound > 0
+						? `Places Found: ${resultsFound}`
+						: "No places found"}
 				</div>
 				<SearchBox initialValue={deps.name} onSubmit={submitSearch} />
 			</div>
