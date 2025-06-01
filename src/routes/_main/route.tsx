@@ -15,7 +15,7 @@ function MainLayout() {
 			<header className="sticky top-0 p-4 md:px-8 bg-background h-[72px]">
 				<NavBar />
 			</header>
-			<main className="p-4 md:px-8 md:py-6 h-[calc(100vh-72px)]">
+			<main className="p-4 md:px-8 h-[calc(100vh-72px)]">
 				<Outlet />
 			</main>
 		</>
