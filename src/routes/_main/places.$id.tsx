@@ -50,7 +50,7 @@ function RouteComponent() {
 			<div className="flex flex-col gap-6 flex-grow">
 				<CardHeader className="gap-0">
 					<div
-						className="flex gap-2 items-center text-muted-foreground text-sm mb-2"
+						className="flex gap-2 items-center text-muted-foreground text-sm mb-2 cursor-pointer hover:underline"
 						onClick={() => returnToPlaces()}
 						onKeyUp={() => returnToPlaces}
 					>
