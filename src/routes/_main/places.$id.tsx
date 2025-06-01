@@ -10,6 +10,7 @@ import { useTRPC } from "@/trpc/react";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
+import { V } from "vitest/dist/chunks/reporters.d.DG9VKi4m.js";
 
 export const Route = createFileRoute("/_main/places/$id")({
 	loader: async ({ context, params }) => {
@@ -26,6 +27,13 @@ function RouteComponent() {
 	const { data: place } = useQuery(trpc.places.getById.queryOptions({ id }));
 
 	if (!place) return;
+
+	const managedBy = place.managedBy
+		?.split("_")
+		.map(
+			(text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
+		)
+		.join(" ");
 
 	return (
 		<Card className="flex flex-col sm:flex-row sm:gap-0">
@@ -54,7 +62,7 @@ function RouteComponent() {
 					<div className="flex gap-2 items-center text-xs text-muted-foreground mt-2 px-2">
 						<InfoIcon size={24} />
 						<div>
-							{place.imageDescription} | © {place.imageCredit}
+							{place.imageDescription} | © {place.imageCredit || managedBy}
 						</div>
 					</div>
 				</CardContent>
