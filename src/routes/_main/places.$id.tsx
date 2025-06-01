@@ -1,3 +1,9 @@
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { ArrowLeftIcon, InfoIcon } from "lucide-react";
+import { useCallback } from "react";
+
+import { useTRPC } from "@/trpc/react";
 import { ManagedByWebsiteLink } from "@/components/managed-by-website-link";
 import {
 	Card,
@@ -6,11 +12,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { useTRPC } from "@/trpc/react";
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
-import { InfoIcon } from "lucide-react";
-import { V } from "vitest/dist/chunks/reporters.d.DG9VKi4m.js";
 
 export const Route = createFileRoute("/_main/places/$id")({
 	loader: async ({ context, params }) => {
@@ -26,6 +27,15 @@ function RouteComponent() {
 	const trpc = useTRPC();
 	const { data: place } = useQuery(trpc.places.getById.queryOptions({ id }));
 
+	const router = useRouter();
+	const returnToPlaces = useCallback(() => {
+		if (router.history.canGoBack()) {
+			router.history.back();
+		} else {
+			router.navigate({ to: "/places" });
+		}
+	}, [router]);
+
 	if (!place) return;
 
 	const managedBy = place.managedBy
@@ -39,7 +49,15 @@ function RouteComponent() {
 		<Card className="flex flex-col sm:flex-row sm:gap-0">
 			<div className="flex flex-col gap-6 flex-grow">
 				<CardHeader className="gap-0">
-					<CardTitle className="text-xl">{place.name}</CardTitle>
+					<div
+						className="flex gap-2 items-center text-muted-foreground text-sm mb-2"
+						onClick={() => returnToPlaces()}
+						onKeyUp={() => returnToPlaces}
+					>
+						<ArrowLeftIcon size={20} />
+						Back to places
+					</div>
+					<CardTitle className="text-2xl">{place.name}</CardTitle>
 					<CardDescription className="text-lg">
 						{[place.town, place.county].filter(Boolean).join(", ")}
 					</CardDescription>
