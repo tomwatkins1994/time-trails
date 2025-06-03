@@ -23,6 +23,7 @@ const isomorphicLink = createIsomorphicFn()
 					headers: req.headers,
 				});
 				return {
+					req,
 					session,
 				};
 			},

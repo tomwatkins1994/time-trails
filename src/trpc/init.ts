@@ -7,6 +7,7 @@ export const createContext = async (opts: CreateNextContextOptions) => {
 	const session = await auth.api.getSession({ headers: opts.req.headers });
 
 	return {
+		req: opts.req,
 		session,
 	};
 };
