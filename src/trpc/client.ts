@@ -2,7 +2,7 @@ import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
 import { trpcRouter, type TRPCRouter } from "./router";
 import superjson from "superjson";
 import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequestHeaders } from "@tanstack/react-start/server";
+import { getWebRequest } from "@tanstack/react-start/server";
 import { auth } from "@/lib/auth";
 import { serverLink } from "./server-link";
 
@@ -17,13 +17,10 @@ const isomorphicLink = createIsomorphicFn()
 		serverLink({
 			router: trpcRouter,
 			createContext: async () => {
-				const headers = new Headers(
-					Object.entries(getRequestHeaders())
-						.filter(([_, value]) => Boolean(value))
-						.map(([name, value]) => [name, value ?? ("" as const)]),
-				);
+				const req = getWebRequest();
+				if (!req) throw Error("No request found");
 				const session = await auth.api.getSession({
-					headers,
+					headers: req.headers,
 				});
 				return {
 					session,
