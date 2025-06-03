@@ -23,13 +23,21 @@ export function serverLink<
 				async function execute() {
 					const context = { ...op.context, ...(await createContext()) };
 					const caller = router.createCaller(context);
+
 					try {
 						const procedure = caller[op.path];
 						if (typeof procedure === "function") {
 							const data = await procedure(op.input);
+							if ("error" in data) {
+								observer.error(TRPCClientError.from(data.error));
+								return;
+							}
 							observer.next({
 								context,
-								result: { data, type: "data" },
+								result: {
+									data,
+									type: "data",
+								},
 							});
 						}
 						observer.complete();
