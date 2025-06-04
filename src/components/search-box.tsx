@@ -6,14 +6,16 @@ import { cn } from "@/lib/utils";
 
 export interface SearchBoxProps
 	extends Omit<ComponentProps<"div">, "onSubmit"> {
-	initialValue: string | undefined;
+	initialValue?: string | undefined;
 	onSubmit: (value: string) => void | Promise<void>;
+	placeholder?: string;
 }
 
 export function SearchBox({
 	initialValue,
 	onSubmit,
 	className,
+	placeholder,
 	...props
 }: SearchBoxProps) {
 	const [inputValue, setInputValue] = useState(initialValue || "");
@@ -28,7 +30,7 @@ export function SearchBox({
 		>
 			<Input
 				className="border-none dark:bg-transparent outline-0 focus:ring-0 focus:ring-offset-0 focus-visible:border-none focus-visible:ring-0 shadow-none"
-				placeholder="Search"
+				placeholder={placeholder || "Search"}
 				value={inputValue}
 				onChange={(e) => setInputValue(e.target.value)}
 				onKeyUp={(e) => e.key === "Enter" && onSubmit(inputValue)}
