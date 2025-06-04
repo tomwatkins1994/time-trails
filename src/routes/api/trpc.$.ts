@@ -8,9 +8,8 @@ function handler({ request }: { request: Request }) {
 		req: request,
 		router: trpcRouter,
 		endpoint: "/api/trpc",
-		createContext: async (opts) => {
+		createContext: async () => {
 			return createContext({
-				...opts,
 				req: request,
 				res: undefined,
 			});
