@@ -3,11 +3,13 @@ import {
 	httpBatchStreamLink,
 	experimental_localLink as localLink,
 } from "@trpc/client";
-import { trpcRouter, type TRPCRouter } from "./router";
 import superjson from "superjson";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
-import { createContext } from "./init";
+import { createContext } from "@/trpc/init";
+import { trpcRouter } from "@/trpc/router";
+
+import type { TRPCRouter } from "@/trpc/router";
 
 const isomorphicLink = createIsomorphicFn()
 	.client(() =>
