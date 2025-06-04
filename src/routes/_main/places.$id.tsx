@@ -49,13 +49,15 @@ function RouteComponent() {
 		<Card className="flex flex-col sm:flex-row sm:gap-0">
 			<div className="flex flex-col gap-6 flex-grow">
 				<CardHeader className="gap-0">
-					<div
-						className="flex gap-2 items-center text-muted-foreground text-sm mb-2 cursor-pointer hover:underline"
-						onClick={() => returnToPlaces()}
-						onKeyUp={() => returnToPlaces}
-					>
-						<ArrowLeftIcon size={20} />
-						Back to places
+					<div>
+						<div
+							className="inline-flex gap-2 items-center text-muted-foreground text-sm mb-2 cursor-pointer hover:underline"
+							onClick={() => returnToPlaces()}
+							onKeyUp={() => returnToPlaces}
+						>
+							<ArrowLeftIcon size={20} />
+							Back to places
+						</div>
 					</div>
 					<CardTitle className="text-2xl">{place.name}</CardTitle>
 					<CardDescription className="text-lg">
