@@ -2,11 +2,11 @@ import { TRPCClientError } from "@trpc/client";
 import { observable } from "@trpc/server/observable";
 
 import type { OperationResultEnvelope, TRPCLink } from "@trpc/client";
-import type { AnyTRPCRouter } from "@trpc/server";
+import type { AnyTRPCRouter, inferRouterContext } from "@trpc/server";
 
 export function serverLink<
 	TRouter extends AnyTRPCRouter,
-	TContext extends TRouter["_def"]["_config"]["$types"]["ctx"],
+	TContext extends inferRouterContext<TRouter>,
 >({
 	router,
 	createContext,
