@@ -1,10 +1,15 @@
-import { createTRPCClient, httpBatchStreamLink } from "@trpc/client";
-import { trpcRouter, type TRPCRouter } from "./router";
+import {
+	createTRPCClient,
+	httpBatchStreamLink,
+	experimental_localLink as localLink,
+} from "@trpc/client";
 import superjson from "superjson";
 import { createIsomorphicFn } from "@tanstack/react-start";
 import { getWebRequest } from "@tanstack/react-start/server";
-import { serverLink } from "./server-link";
-import { createContext } from "./init";
+import { createContext } from "@/trpc/init";
+import { trpcRouter } from "@/trpc/router";
+
+import type { TRPCRouter } from "@/trpc/router";
 
 const isomorphicLink = createIsomorphicFn()
 	.client(() =>
@@ -14,8 +19,9 @@ const isomorphicLink = createIsomorphicFn()
 		}),
 	)
 	.server(() =>
-		serverLink({
+		localLink({
 			router: trpcRouter,
+			transformer: superjson,
 			createContext: async () => {
 				const req = getWebRequest();
 				if (!req) throw Error("No request found");
