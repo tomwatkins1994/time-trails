@@ -3,6 +3,8 @@ import { and, ilike, inArray, gte, sql, gt } from "drizzle-orm";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
 import { places } from "@/db/schema";
+import { redis } from "@/db/redis";
+import { D } from "node_modules/@upstash/redis/zmscore-DzNHSWxc.mjs";
 
 export const placesRouter = {
 	getById: publicProcedure
@@ -66,7 +68,13 @@ export const placesRouter = {
 			}),
 		)
 		.query(async ({ input: { number } }) => {
-			return await db
+			const cacheKey = `home_images_${number}`;
+			const cachedImages = await redis.get(cacheKey);
+			if (cachedImages) {
+				return cachedImages;
+			}
+
+			const images = db
 				.select({
 					id: places.id,
 					imageUrl: places.imageUrl,
@@ -76,7 +84,8 @@ export const placesRouter = {
 				.from(places)
 				.where((t) => gt(t.imageUrl, ""))
 				.limit(number)
-				.orderBy(sql`RANDOM()`)
-				.$withCache();
+				.orderBy(sql`RANDOM()`);
+			redis.set(cacheKey, images, { ex: 10 });
+			return images;
 		}),
 };
