@@ -67,7 +67,12 @@ export const placesRouter = {
 		)
 		.query(async ({ input: { number } }) => {
 			return await db
-				.select()
+				.select({
+					id: places.id,
+					imageUrl: places.imageUrl,
+					imageDescription: places.imageDescription,
+					imageCredit: places.imageCredit,
+				})
 				.from(places)
 				.where((t) => gt(t.imageUrl, ""))
 				.limit(number)
