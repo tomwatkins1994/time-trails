@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { and, ilike, inArray, gte, sql } from "drizzle-orm";
+import { and, ilike, inArray, gte, sql, gt } from "drizzle-orm";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
 import { places } from "@/db/schema";
@@ -66,17 +66,12 @@ export const placesRouter = {
 			}),
 		)
 		.query(async ({ input: { number } }) => {
-			return await db.query.places.findMany({
-				columns: {
-					id: true,
-					name: true,
-					imageUrl: true,
-					imageDescription: true,
-					imageCredit: true,
-				},
-				where: (t, { gt }) => gt(t.imageUrl, ""),
-				limit: number,
-				orderBy: sql`RANDOM()`,
-			});
+			return await db
+				.select()
+				.from(places)
+				.where((t) => gt(t.imageUrl, ""))
+				.limit(number)
+				.orderBy(sql`RANDOM()`)
+				.$withCache();
 		}),
 };
