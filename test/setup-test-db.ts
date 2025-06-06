@@ -5,6 +5,7 @@ import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "node:path";
 import { afterAll, vi } from "vitest";
 import { setupDb } from "@/db";
+import { createRedis } from "@/db/redis";
 
 const dbContainer = await new PostgreSqlContainer("postgres:17.5").start();
 const redisContainer = await new RedisContainer("redis:8.0.2").start();
@@ -37,6 +38,16 @@ vi.doMock("@/db", async (importOriginal) => {
 	return {
 		...(await importOriginal()),
 		db,
+	};
+});
+
+vi.doMock("@/db/redis", async (importOriginal) => {
+	return {
+		...(await importOriginal()),
+		redis: createRedis({
+			url: upstashUrl,
+			token: upstashToken,
+		}),
 	};
 });
 

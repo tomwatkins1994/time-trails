@@ -1,4 +1,5 @@
-import { Redis } from "@upstash/redis";
+import "dotenv/config";
+import { Redis, type RedisConfigNodejs } from "@upstash/redis";
 import { z } from "zod";
 
 const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
@@ -8,7 +9,11 @@ const { UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
 	})
 	.parse(process.env);
 
-export const redis = new Redis({
+export function createRedis(options: RedisConfigNodejs) {
+	return new Redis(options);
+}
+
+export const redis = createRedis({
 	url: UPSTASH_REDIS_REST_URL,
 	token: UPSTASH_REDIS_REST_TOKEN,
 });
