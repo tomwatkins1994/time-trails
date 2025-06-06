@@ -104,6 +104,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.1.6)
+      testcontainers:
+        specifier: ^11.0.0
+        version: 11.0.0
       vinxi:
         specifier: ^0.5.6
         version: 0.5.6(@types/node@22.15.17)(@upstash/redis@1.35.0)(db0@0.3.2(drizzle-orm@0.44.2(@types/pg@8.15.1)(@upstash/redis@1.35.0)(kysely@0.28.2)(pg@8.15.6)))(drizzle-orm@0.44.2(@types/pg@8.15.1)(@upstash/redis@1.35.0)(kysely@0.28.2)(pg@8.15.6))(ioredis@5.6.1)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.4)(yaml@2.7.1)
@@ -120,6 +123,9 @@ importers:
       '@testcontainers/postgresql':
         specifier: ^10.25.0
         version: 10.25.0
+      '@testcontainers/redis':
+        specifier: ^11.0.0
+        version: 11.0.0
       '@types/pg':
         specifier: ^8.15.1
         version: 8.15.1
@@ -2278,6 +2284,9 @@ packages:
   '@testcontainers/postgresql@10.25.0':
     resolution: {integrity: sha512-VkpqpX9YZ8aq4wfk6sJRopGTmlBdE1kErzAFWJ/1pY/XrEZ7nxdfFBG+En2icQnbv3BIFQYysEKxEFMNB+hQVw==}
 
+  '@testcontainers/redis@11.0.0':
+    resolution: {integrity: sha512-+6/Q8GQcKM2p8JLwHrilHL3yY2SpsOip71dr+KImp1EJpxFSvB60LOMCvHob4tDx/5jkgLPaHy7XQzK6Iyulmg==}
+
   '@trpc/client@11.3.0':
     resolution: {integrity: sha512-O8fih4Tj+mGqN7bPM1inXJ7/3SFYI3/0D/AKYDc/G6Bq7GNNX+1st0YMMdtFk+Vv3e8K95h6233ZOwRX0qiwOg==}
     peerDependencies:
@@ -2322,6 +2331,9 @@ packages:
 
   '@types/dockerode@3.3.38':
     resolution: {integrity: sha512-nnrcfUe2iR+RyOuz0B4bZgQwD9djQa9ADEjp7OAgBs10pYT0KSCtplJjcmBDJz0qaReX5T7GbE5i4VplvzUHvA==}
+
+  '@types/dockerode@3.3.39':
+    resolution: {integrity: sha512-uMPmxehH6ofeYjaslASPtjvyH8FRJdM9fZ+hjhGzL4Jq3bGjr9D7TKmp9soSwgFncNk0HOwmyBxjqOb3ikjjsA==}
 
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
@@ -3082,6 +3094,10 @@ packages:
 
   docker-compose@0.24.8:
     resolution: {integrity: sha512-plizRs/Vf15H+GCVxq2EUvyPK7ei9b/cVesHvjnX4xaXjM9spHe2Ytq0BitndFgvTJ3E3NljPNUEl7BAN43iZw==}
+    engines: {node: '>= 6.0.0'}
+
+  docker-compose@1.2.0:
+    resolution: {integrity: sha512-wIU1eHk3Op7dFgELRdmOYlPYS4gP8HhH1ZmZa13QZF59y0fblzFDFmKPhyc05phCy2hze9OEvNZAsoljrs+72w==}
     engines: {node: '>= 6.0.0'}
 
   docker-modem@5.0.6:
@@ -4935,6 +4951,9 @@ packages:
   tar-fs@3.0.8:
     resolution: {integrity: sha512-ZoROL70jptorGAlgAYiLoBLItEKw/fUxg9BSYK/dF/GAGYFJOJJJMvjPAKDJraCXFwadD456FCuvLWgfhMsPwg==}
 
+  tar-fs@3.0.9:
+    resolution: {integrity: sha512-XF4w9Xp+ZQgifKakjZYmFdkLoSWd34VGKcsTCwlNWM7QG3ZbaxnTsaBwnjFZqHRf/rROxaR8rXnbtwdvaDI+lA==}
+
   tar-stream@2.2.0:
     resolution: {integrity: sha512-ujeqbceABgwMZxEJnk2HDY2DlnUZ+9oEcb1KzTVfYHio0UE6dG71n60d8D2I4qNvleWrrXpmjpt7vZeF1LnMZQ==}
     engines: {node: '>=6'}
@@ -4957,6 +4976,9 @@ packages:
 
   testcontainers@10.25.0:
     resolution: {integrity: sha512-X3x6cjorEMgei1vVx3M7dnTMzWoWOTi4krpUf3C2iOvOcwsaMUHbca9J4yzpN65ieiWhcK2dA5dxpZyUonwC2Q==}
+
+  testcontainers@11.0.0:
+    resolution: {integrity: sha512-8zY2V+eovC6aylgMqMR3A7H+un2gqpqepbvBCnjo7QP2fpI0pJZhSus+A5TckHpF2CR2d1Zj/IQ5rNPW/HjS6g==}
 
   text-decoder@1.2.3:
     resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
@@ -5092,6 +5114,10 @@ packages:
   undici@5.29.0:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
+
+  undici@7.10.0:
+    resolution: {integrity: sha512-u5otvFBOBZvmdjWLVW+5DAc9Nkq8f24g0O9oY7qw2JVIF1VocIFoyz9JFkuVOS2j41AufeO0xnlweJ2RLT8nGw==}
+    engines: {node: '>=20.18.1'}
 
   unenv@1.10.0:
     resolution: {integrity: sha512-wY5bskBQFL9n3Eca5XnhH6KbUo/tfvkwm9OpcdCvLaeA7piBNbavbOKJySEwQ1V0RH6HvNlSAFRTpvTqgKRQXQ==}
@@ -7666,6 +7692,13 @@ snapshots:
       - bare-buffer
       - supports-color
 
+  '@testcontainers/redis@11.0.0':
+    dependencies:
+      testcontainers: 11.0.0
+    transitivePeerDependencies:
+      - bare-buffer
+      - supports-color
+
   '@trpc/client@11.3.0(@trpc/server@11.3.0(typescript@5.8.3))(typescript@5.8.3)':
     dependencies:
       '@trpc/server': 11.3.0(typescript@5.8.3)
@@ -7715,6 +7748,12 @@ snapshots:
       '@types/ssh2': 1.15.5
 
   '@types/dockerode@3.3.38':
+    dependencies:
+      '@types/docker-modem': 3.0.6
+      '@types/node': 22.15.17
+      '@types/ssh2': 1.15.5
+
+  '@types/dockerode@3.3.39':
     dependencies:
       '@types/docker-modem': 3.0.6
       '@types/node': 22.15.17
@@ -8551,6 +8590,10 @@ snapshots:
       path-type: 4.0.0
 
   docker-compose@0.24.8:
+    dependencies:
+      yaml: 2.7.1
+
+  docker-compose@1.2.0:
     dependencies:
       yaml: 2.7.1
 
@@ -10495,6 +10538,16 @@ snapshots:
     transitivePeerDependencies:
       - bare-buffer
 
+  tar-fs@3.0.9:
+    dependencies:
+      pump: 3.0.2
+      tar-stream: 3.1.7
+    optionalDependencies:
+      bare-fs: 4.1.4
+      bare-path: 3.0.0
+    transitivePeerDependencies:
+      - bare-buffer
+
   tar-stream@2.2.0:
     dependencies:
       bl: 4.1.0
@@ -10551,6 +10604,27 @@ snapshots:
       tar-fs: 3.0.8
       tmp: 0.2.3
       undici: 5.29.0
+    transitivePeerDependencies:
+      - bare-buffer
+      - supports-color
+
+  testcontainers@11.0.0:
+    dependencies:
+      '@balena/dockerignore': 1.0.2
+      '@types/dockerode': 3.3.39
+      archiver: 7.0.1
+      async-lock: 1.4.1
+      byline: 5.0.0
+      debug: 4.4.1
+      docker-compose: 1.2.0
+      dockerode: 4.0.6
+      get-port: 7.1.0
+      proper-lockfile: 4.1.2
+      properties-reader: 2.3.0
+      ssh-remote-port-forward: 1.0.4
+      tar-fs: 3.0.9
+      tmp: 0.2.3
+      undici: 7.10.0
     transitivePeerDependencies:
       - bare-buffer
       - supports-color
@@ -10657,6 +10731,8 @@ snapshots:
   undici@5.29.0:
     dependencies:
       '@fastify/busboy': 2.1.1
+
+  undici@7.10.0: {}
 
   unenv@1.10.0:
     dependencies:
