@@ -6,20 +6,34 @@ import * as schema from "./schema";
 
 export interface DBOptions {
 	url: string;
+	cache: {
+		url: string;
+		token: string;
+	};
 }
-export function setupDb({ url }: DBOptions) {
+export function setupDb({ url, cache }: DBOptions) {
 	return drizzle(url, {
 		schema,
 		casing: "snake_case",
+		cache: upstashCache({
+			url: cache.url,
+			token: cache.token,
+		}),
 	});
 }
 
-const { DATABASE_URL } = z
+const { DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
 	.object({
 		DATABASE_URL: z.string(),
+		UPSTASH_REDIS_REST_URL: z.string(),
+		UPSTASH_REDIS_REST_TOKEN: z.string(),
 	})
 	.parse(process.env);
 
 export const db = setupDb({
 	url: DATABASE_URL,
+	cache: {
+		url: UPSTASH_REDIS_REST_URL,
+		token: UPSTASH_REDIS_REST_TOKEN,
+	},
 });
