@@ -15,10 +15,11 @@ const dbContainer = await new PostgreSqlContainer("postgres:17.5")
 	.start();
 
 const redisContainer = await new RedisContainer("redis:8.0.2")
+	.withExposedPorts(6379)
 	.withNetworkMode(network.getName())
 	.withNetworkAliases("redis")
 	.start();
-console.log({ redisUrl: redisContainer.getConnectionUrl() });
+
 const upstashToken = "example_token";
 const upstashContainer = await new GenericContainer(
 	"hiett/serverless-redis-http:latest",
@@ -28,7 +29,7 @@ const upstashContainer = await new GenericContainer(
 	.withEnvironment({
 		SRH_MODE: "env",
 		SRH_TOKEN: upstashToken,
-		SRH_CONNECTION_STRING: redisContainer.getConnectionUrl(),
+		SRH_CONNECTION_STRING: `redis://redis:${redisContainer.getMappedPort(6379)}`,
 	})
 	.start();
 const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
@@ -63,8 +64,10 @@ vi.doMock("@/db/redis", async (importOriginal) => {
 });
 
 afterAll(async () => {
-	dbContainer.stop();
-	upstashContainer.stop();
-	redisContainer.stop();
-	network.stop();
+	await Promise.all([
+		dbContainer.stop(),
+		upstashContainer.stop(),
+		redisContainer.stop(),
+	]);
+	await network.stop();
 });
