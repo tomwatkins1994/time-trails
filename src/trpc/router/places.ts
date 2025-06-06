@@ -5,6 +5,8 @@ import { publicProcedure } from "../init";
 import { places } from "@/db/schema";
 import { redis } from "@/db/redis";
 import { D } from "node_modules/@upstash/redis/zmscore-DzNHSWxc.mjs";
+import { cachedQuery } from "@/db/cached-query";
+import { Input } from "@/components/ui/input";
 
 export const placesRouter = {
 	getById: publicProcedure
@@ -68,24 +70,23 @@ export const placesRouter = {
 			}),
 		)
 		.query(async ({ input: { number } }) => {
-			const cacheKey = `home_images_${number}`;
-			const cachedImages = await redis.get(cacheKey);
-			if (cachedImages) {
-				return cachedImages;
-			}
-
-			const images = db
-				.select({
-					id: places.id,
-					imageUrl: places.imageUrl,
-					imageDescription: places.imageDescription,
-					imageCredit: places.imageCredit,
-				})
-				.from(places)
-				.where((t) => gt(t.imageUrl, ""))
-				.limit(number)
-				.orderBy(sql`RANDOM()`);
-			redis.set(cacheKey, images, { ex: 10 });
-			return images;
+			return await cachedQuery(
+				"home_images",
+				{ number },
+				() =>
+					db
+						.select({
+							id: places.id,
+							name: places.name,
+							imageUrl: places.imageUrl,
+							imageDescription: places.imageDescription,
+							imageCredit: places.imageCredit,
+						})
+						.from(places)
+						.where((t) => gt(t.imageUrl, ""))
+						.limit(number)
+						.orderBy(sql`RANDOM()`),
+				{ ex: 3600 }, // 1 hour
+			);
 		}),
 };
