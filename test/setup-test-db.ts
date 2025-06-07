@@ -33,7 +33,7 @@ const upstashContainer = await new GenericContainer(
 	.start();
 const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
 
-const db = setupDb({
+const { db, pool } = setupDb({
 	url: dbContainer.getConnectionUri(),
 	cache: {
 		url: upstashUrl,
@@ -63,6 +63,7 @@ vi.doMock("@/db/redis", async (importOriginal) => {
 });
 
 afterAll(async () => {
+	await pool.end();
 	await Promise.all([
 		dbContainer.stop(),
 		upstashContainer.stop(),

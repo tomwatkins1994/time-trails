@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { upstashCache } from "drizzle-orm/cache/upstash";
+import { Pool } from "pg";
 import { z } from "zod";
 import * as schema from "./schema";
 
@@ -11,15 +12,22 @@ export interface DBOptions {
 		token: string;
 	};
 }
+
 export function setupDb({ url, cache }: DBOptions) {
-	return drizzle(url, {
-		schema,
-		casing: "snake_case",
-		cache: upstashCache({
-			url: cache.url,
-			token: cache.token,
-		}),
+	const pool = new Pool({
+		connectionString: url,
 	});
+	return {
+		pool,
+		db: drizzle(pool, {
+			schema,
+			casing: "snake_case",
+			cache: upstashCache({
+				url: cache.url,
+				token: cache.token,
+			}),
+		}),
+	};
 }
 
 const { DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
@@ -30,7 +38,7 @@ const { DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
 	})
 	.parse(process.env);
 
-export const db = setupDb({
+export const { db } = setupDb({
 	url: DATABASE_URL,
 	cache: {
 		url: UPSTASH_REDIS_REST_URL,
