@@ -35,7 +35,7 @@ const upstashContainer = await new GenericContainer(
 	.start();
 const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
 
-// DB Setup
+// Databse setup
 
 const { db, pool } = setupDb({
 	url: dbContainer.getConnectionUri(),
