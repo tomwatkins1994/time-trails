@@ -15,7 +15,6 @@ const dbContainer = await new PostgreSqlContainer("postgres:17.5")
 	.start();
 
 const redisContainer = await new RedisContainer("redis:8.0.2")
-	.withExposedPorts(6379)
 	.withNetworkMode(network.getName())
 	.withNetworkAliases("redis")
 	.start();
@@ -29,7 +28,7 @@ const upstashContainer = await new GenericContainer(
 	.withEnvironment({
 		SRH_MODE: "env",
 		SRH_TOKEN: upstashToken,
-		SRH_CONNECTION_STRING: `redis://redis:${redisContainer.getMappedPort(6379)}`,
+		SRH_CONNECTION_STRING: "redis://redis:6379",
 	})
 	.start();
 const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
