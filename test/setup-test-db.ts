@@ -7,6 +7,8 @@ import { afterAll, vi } from "vitest";
 import { setupDb } from "@/db";
 import { createRedis } from "@/db/redis";
 
+// Dependencies
+
 const network = await new Network().start();
 
 const dbContainer = await new PostgreSqlContainer("postgres:17.5")
@@ -33,6 +35,8 @@ const upstashContainer = await new GenericContainer(
 	.start();
 const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
 
+// DB Setup
+
 const { db, pool } = setupDb({
 	url: dbContainer.getConnectionUri(),
 	cache: {
@@ -44,6 +48,8 @@ const { db, pool } = setupDb({
 await migrate(db, {
 	migrationsFolder: path.join(process.cwd(), "drizzle"),
 });
+
+// Module mocks
 
 vi.doMock("@/db", async (importOriginal) => {
 	return {
@@ -61,6 +67,8 @@ vi.doMock("@/db/redis", async (importOriginal) => {
 		}),
 	};
 });
+
+// Clean up
 
 afterAll(async () => {
 	await pool.end();
