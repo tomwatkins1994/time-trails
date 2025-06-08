@@ -16,6 +16,7 @@ export const places = pgTable(
 		imageUrl: varchar(),
 		imageDescription: varchar(),
 		imageCredit: varchar(),
+		imageBlurhash: varchar(),
 		managedBy: placeManager(),
 		managerId: varchar(),
 		managerWebsiteUrl: varchar(),
