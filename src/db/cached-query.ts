@@ -14,7 +14,7 @@ export async function cachedQuery<T>(
 	args: any,
 	query: () => Promise<T>,
 	opts?: SetCommandOptions,
-) {
+): Promise<T> {
 	const cacheKey = generateCacheKey(key, args);
 	const cachedResult = await redis.get<T>(cacheKey);
 	if (cachedResult) {
