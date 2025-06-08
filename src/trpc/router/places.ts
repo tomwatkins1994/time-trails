@@ -1,8 +1,12 @@
 import { z } from "zod";
-import { and, ilike, inArray, gte, sql } from "drizzle-orm";
+import { and, ilike, inArray, gte, sql, gt } from "drizzle-orm";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
 import { places } from "@/db/schema";
+import { redis } from "@/db/redis";
+import { D } from "node_modules/@upstash/redis/zmscore-DzNHSWxc.mjs";
+import { cachedQuery } from "@/db/cached-query";
+import { Input } from "@/components/ui/input";
 
 export const placesRouter = {
 	getById: publicProcedure
@@ -66,17 +70,23 @@ export const placesRouter = {
 			}),
 		)
 		.query(async ({ input: { number } }) => {
-			return await db.query.places.findMany({
-				columns: {
-					id: true,
-					name: true,
-					imageUrl: true,
-					imageDescription: true,
-					imageCredit: true,
-				},
-				where: (t, { gt }) => gt(t.imageUrl, ""),
-				limit: number,
-				orderBy: sql`RANDOM()`,
-			});
+			return await cachedQuery(
+				"home_images",
+				{ number },
+				() =>
+					db
+						.select({
+							id: places.id,
+							name: places.name,
+							imageUrl: places.imageUrl,
+							imageDescription: places.imageDescription,
+							imageCredit: places.imageCredit,
+						})
+						.from(places)
+						.where((t) => gt(t.imageUrl, ""))
+						.limit(number)
+						.orderBy(sql`RANDOM()`),
+				{ ex: 3600 }, // 1 hour
+			);
 		}),
 };

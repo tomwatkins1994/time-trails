@@ -1,14 +1,55 @@
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
+import { RedisContainer } from "@testcontainers/redis";
+import { GenericContainer, Network } from "testcontainers";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import path from "node:path";
 import { afterAll, vi } from "vitest";
 import { setupDb } from "@/db";
+import { createRedis } from "@/db/redis";
 
-const container = await new PostgreSqlContainer("postgres:17.5").start();
-const db = setupDb(container.getConnectionUri());
+// Dependencies
+
+const network = await new Network().start();
+
+const dbContainer = await new PostgreSqlContainer("postgres:17.5")
+	.withNetworkMode(network.getName())
+	.withNetworkAliases("db")
+	.start();
+
+const redisContainer = await new RedisContainer("redis:8.0.2")
+	.withNetworkMode(network.getName())
+	.withNetworkAliases("redis")
+	.start();
+
+const upstashToken = "example_token";
+const upstashContainer = await new GenericContainer(
+	"hiett/serverless-redis-http:latest",
+)
+	.withExposedPorts(80)
+	.withNetworkMode(network.getName())
+	.withEnvironment({
+		SRH_MODE: "env",
+		SRH_TOKEN: upstashToken,
+		SRH_CONNECTION_STRING: "redis://redis:6379",
+	})
+	.start();
+const upstashUrl = `http://${upstashContainer.getHost()}:${upstashContainer.getMappedPort(80)}`;
+
+// Databse setup
+
+const { db, pool } = setupDb({
+	url: dbContainer.getConnectionUri(),
+	cache: {
+		url: upstashUrl,
+		token: upstashToken,
+	},
+});
+
 await migrate(db, {
 	migrationsFolder: path.join(process.cwd(), "drizzle"),
 });
+
+// Module mocks
 
 vi.doMock("@/db", async (importOriginal) => {
 	return {
@@ -17,6 +58,24 @@ vi.doMock("@/db", async (importOriginal) => {
 	};
 });
 
+vi.doMock("@/db/redis", async (importOriginal) => {
+	return {
+		...(await importOriginal()),
+		redis: createRedis({
+			url: upstashUrl,
+			token: upstashToken,
+		}),
+	};
+});
+
+// Clean up
+
 afterAll(async () => {
-	container.stop();
+	await pool.end();
+	await Promise.all([
+		dbContainer.stop(),
+		upstashContainer.stop(),
+		redisContainer.stop(),
+	]);
+	await network.stop();
 });
