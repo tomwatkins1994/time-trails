@@ -16,14 +16,14 @@ export async function updatePlaceImageBlurhash(placeId: string) {
 	await db.update(places).set({ imageBlurhash }).where(eq(places.id, placeId));
 }
 
-export async function updatePlacesMissingImageBlurhas() {
+export async function updatePlacesMissingImageBlurhash() {
 	const placesToUpdate = await db.query.places.findMany({
 		columns: { id: true },
 		where: (t, { and, gt, isNull }) =>
 			and(gt(t.imageUrl, ""), isNull(t.imageBlurhash)),
 	});
 
-	await Promise.allSettled(
-		placesToUpdate.map((place) => updatePlaceImageBlurhash(place.id)),
-	);
+	for (const place of placesToUpdate) {
+		await updatePlaceImageBlurhash(place.id);
+	}
 }
