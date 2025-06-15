@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_main/")({
 	component: RouteComponent,
 	loader: async ({ context: { queryClient, trpcQuery } }) => {
 		await queryClient.prefetchQuery({
-			...trpcQuery.places.getImages.queryOptions({
+			...trpcQuery.places.getRandomImages.queryOptions({
 				number: 4,
 			}),
 		});
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_main/")({
 function RouteComponent() {
 	const trpc = useTRPC();
 	const { data: images } = useSuspenseQuery(
-		trpc.places.getImages.queryOptions({ number: 4 }),
+		trpc.places.getRandomImages.queryOptions({ number: 4 }),
 	);
 
 	const navigate = Route.useNavigate();

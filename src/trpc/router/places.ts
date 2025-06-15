@@ -63,7 +63,7 @@ export const placesRouter = {
 				nextCursor,
 			};
 		}),
-	getImages: publicProcedure
+	getRandomImages: publicProcedure
 		.input(
 			z.object({
 				number: z.number(),
@@ -71,7 +71,7 @@ export const placesRouter = {
 		)
 		.query(async ({ input: { number } }) => {
 			return await cachedQuery(
-				"home_images",
+				"random_place_images",
 				{ number },
 				() =>
 					db
@@ -81,6 +81,7 @@ export const placesRouter = {
 							imageUrl: places.imageUrl,
 							imageDescription: places.imageDescription,
 							imageCredit: places.imageCredit,
+							imageBlurhash: places.imageBlurhash,
 						})
 						.from(places)
 						.where((t) => gt(t.imageUrl, ""))
