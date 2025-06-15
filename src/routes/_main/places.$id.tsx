@@ -12,6 +12,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { Image } from "@/components/inage";
 
 export const Route = createFileRoute("/_main/places/$id")({
 	loader: async ({ context, params }) => {
@@ -78,7 +79,12 @@ function RouteComponent() {
 			</div>
 			{place.imageUrl ? (
 				<CardContent className="w-full sm:max-w-[50%]">
-					<img src={place.imageUrl} alt="TODO" className="rounded-xl" />
+					<Image
+						src={place.imageUrl}
+						alt="TODO"
+						className="rounded-xl"
+						blurhash={place.imageBlurhash}
+					/>
 					<div className="flex gap-2 items-center text-xs text-muted-foreground mt-2 px-2">
 						<InfoIcon size={24} />
 						<div>

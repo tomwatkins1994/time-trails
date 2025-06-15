@@ -57,6 +57,13 @@
       "when": 1748644300594,
       "tag": "0007_rapid_squirrel_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1749425873984,
+      "tag": "0008_heavy_barracuda",
+      "breakpoints": true
     }
   ]
 }

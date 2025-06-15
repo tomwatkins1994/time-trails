@@ -1,18 +1,18 @@
-import { SearchBox } from "@/components/search-box";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useTRPC } from "@/trpc/react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRightIcon } from "lucide-react";
 import { useCallback } from "react";
 
+import { useTRPC } from "@/trpc/react";
+import { SearchBox } from "@/components/search-box";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Image } from "@/components/inage";
+
 export const Route = createFileRoute("/_main/")({
 	component: RouteComponent,
 	loader: async ({ context: { queryClient, trpcQuery } }) => {
 		await queryClient.prefetchQuery({
-			...trpcQuery.places.getImages.queryOptions({
+			...trpcQuery.places.getRandomImages.queryOptions({
 				number: 4,
 			}),
 		});
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/_main/")({
 function RouteComponent() {
 	const trpc = useTRPC();
 	const { data: images } = useSuspenseQuery(
-		trpc.places.getImages.queryOptions({ number: 4 }),
+		trpc.places.getRandomImages.queryOptions({ number: 4 }),
 	);
 
 	const navigate = Route.useNavigate();
@@ -69,21 +69,24 @@ function RouteComponent() {
 					</CardContent>
 				</div>
 				<div className="grid grid-cols-2 gap-2 px-6">
-					{images.map((image) => (
-						<Link
-							key={image.id}
-							to="/places/$id"
-							params={{ id: image.id }}
-							viewTransition
-						>
-							<img
-								className="rounded w-full h-[100px] sm:h-[150px] lg:h-[200px]"
-								src={image.imageUrl || ""}
-								alt={image.imageDescription || ""}
-								title={image.name}
-							/>
-						</Link>
-					))}
+					{images.map((image) => {
+						return (
+							<Link
+								key={image.id}
+								to="/places/$id"
+								params={{ id: image.id }}
+								viewTransition
+							>
+								<Image
+									src={image.imageUrl || ""}
+									className="rounded w-full h-[100px] sm:h-[150px] lg:h-[200px]"
+									alt={image.imageDescription || ""}
+									title={image.name}
+									blurhash={image.imageBlurhash}
+								/>
+							</Link>
+						);
+					})}
 				</div>
 			</Card>
 		</div>
