@@ -3,9 +3,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRightIcon } from "lucide-react";
 import { useCallback } from "react";
 
+import { useTRPC } from "@/trpc/react";
 import { SearchBox } from "@/components/search-box";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTRPC } from "@/trpc/react";
 import { Image } from "@/components/inage";
 
 export const Route = createFileRoute("/_main/")({
