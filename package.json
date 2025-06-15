@@ -60,6 +60,8 @@
     "@trpc/server": "^11.3.0",
     "@trpc/tanstack-react-query": "^11.3.0",
     "@unpic/pixels": "^1.3.0",
+    "@unpic/placeholder": "^0.1.2",
+    "@unpic/react": "^1.0.1",
     "@upstash/redis": "^1.35.0",
     "better-auth": "^1.2.8",
     "blurhash": "^2.0.5",
