@@ -8,9 +8,11 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ManagedByWebsiteLink } from "./managed-by-website-link";
+import { Image } from "./inage";
 
 export interface PhotoCardProps extends ComponentProps<"div"> {
 	imageUrl: string | null;
+	imageBlurhash: string | null;
 	title: string;
 	subTitle: string;
 	description: string;
@@ -21,6 +23,7 @@ export interface PhotoCardProps extends ComponentProps<"div"> {
 export function PhotoCard({
 	className,
 	imageUrl,
+	imageBlurhash,
 	title,
 	subTitle,
 	description,
@@ -30,10 +33,11 @@ export function PhotoCard({
 	return (
 		<Card className={cn("pt-0 gap-4 pb-4", className)}>
 			{imageUrl ? (
-				<img
+				<Image
 					src={imageUrl}
-					alt="TODO"
 					className="max-h-[300px] min-w-full md:h-[200px] overflow-hidden rounded-t-xl"
+					alt="TODO"
+					blurhash={imageBlurhash}
 				/>
 			) : null}
 			<CardHeader>

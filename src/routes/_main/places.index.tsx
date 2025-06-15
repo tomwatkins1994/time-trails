@@ -172,6 +172,7 @@ function Home() {
 								<PhotoCard
 									className="h-full"
 									imageUrl={place.imageUrl}
+									imageBlurhash={place.imageBlurhash}
 									title={place.name}
 									subTitle={[place.town, place.county]
 										.filter(Boolean)
