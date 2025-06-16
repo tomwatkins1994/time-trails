@@ -11,4 +11,7 @@ export default defineConfig({
 		tailwindcss(),
 		tanstackStart(),
 	],
+	test: {
+		setupFiles: ["./test/setup-test-db.ts"],
+	},
 });
