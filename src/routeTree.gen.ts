@@ -8,116 +8,206 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-// Import Routes
+import { createServerRootRoute } from '@tanstack/react-start/server'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as MainRouteImport } from './routes/_main/route'
-import { Route as AuthRouteImport } from './routes/_auth/route'
-import { Route as MainIndexImport } from './routes/_main/index'
-import { Route as AuthRegisterImport } from './routes/_auth/register'
-import { Route as AuthLoginImport } from './routes/_auth/login'
-import { Route as MainPlacesIndexImport } from './routes/_main/places.index'
-import { Route as MainPlacesIdImport } from './routes/_main/places.$id'
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as MainRouteRouteImport } from './routes/_main/route'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as MainIndexRouteImport } from './routes/_main/index'
+import { Route as AuthRegisterRouteImport } from './routes/_auth/register'
+import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as MainPlacesIndexRouteImport } from './routes/_main/places.index'
+import { Route as MainPlacesIdRouteImport } from './routes/_main/places.$id'
+import { ServerRoute as ApiTrpcSplatServerRouteImport } from './routes/api/trpc.$'
+import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth.$'
 
-// Create/Update Routes
+const rootServerRouteImport = createServerRootRoute()
 
-const MainRouteRoute = MainRouteImport.update({
+const MainRouteRoute = MainRouteRouteImport.update({
   id: '/_main',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const AuthRouteRoute = AuthRouteImport.update({
+const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/_auth',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const MainIndexRoute = MainIndexImport.update({
+const MainIndexRoute = MainIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => MainRouteRoute,
 } as any)
-
-const AuthRegisterRoute = AuthRegisterImport.update({
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const AuthLoginRoute = AuthLoginImport.update({
+const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-
-const MainPlacesIndexRoute = MainPlacesIndexImport.update({
+const MainPlacesIndexRoute = MainPlacesIndexRouteImport.update({
   id: '/places/',
   path: '/places/',
   getParentRoute: () => MainRouteRoute,
 } as any)
-
-const MainPlacesIdRoute = MainPlacesIdImport.update({
+const MainPlacesIdRoute = MainPlacesIdRouteImport.update({
   id: '/places/$id',
   path: '/places/$id',
   getParentRoute: () => MainRouteRoute,
 } as any)
+const ApiTrpcSplatServerRoute = ApiTrpcSplatServerRouteImport.update({
+  id: '/api/trpc/$',
+  path: '/api/trpc/$',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
+const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/': typeof MainIndexRoute
+  '/places/$id': typeof MainPlacesIdRoute
+  '/places': typeof MainPlacesIndexRoute
+}
+export interface FileRoutesByTo {
+  '/login': typeof AuthLoginRoute
+  '/register': typeof AuthRegisterRoute
+  '/': typeof MainIndexRoute
+  '/places/$id': typeof MainPlacesIdRoute
+  '/places': typeof MainPlacesIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/_main': typeof MainRouteRouteWithChildren
+  '/_auth/login': typeof AuthLoginRoute
+  '/_auth/register': typeof AuthRegisterRoute
+  '/_main/': typeof MainIndexRoute
+  '/_main/places/$id': typeof MainPlacesIdRoute
+  '/_main/places/': typeof MainPlacesIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/login' | '/register' | '/' | '/places/$id' | '/places'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/login' | '/register' | '/' | '/places/$id' | '/places'
+  id:
+    | '__root__'
+    | '/_auth'
+    | '/_main'
+    | '/_auth/login'
+    | '/_auth/register'
+    | '/_main/'
+    | '/_main/places/$id'
+    | '/_main/places/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  MainRouteRoute: typeof MainRouteRouteWithChildren
+}
+export interface FileServerRoutesByFullPath {
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/trpc/$': typeof ApiTrpcSplatServerRoute
+}
+export interface FileServerRoutesByTo {
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/trpc/$': typeof ApiTrpcSplatServerRoute
+}
+export interface FileServerRoutesById {
+  __root__: typeof rootServerRouteImport
+  '/api/auth/$': typeof ApiAuthSplatServerRoute
+  '/api/trpc/$': typeof ApiTrpcSplatServerRoute
+}
+export interface FileServerRouteTypes {
+  fileServerRoutesByFullPath: FileServerRoutesByFullPath
+  fullPaths: '/api/auth/$' | '/api/trpc/$'
+  fileServerRoutesByTo: FileServerRoutesByTo
+  to: '/api/auth/$' | '/api/trpc/$'
+  id: '__root__' | '/api/auth/$' | '/api/trpc/$'
+  fileServerRoutesById: FileServerRoutesById
+}
+export interface RootServerRouteChildren {
+  ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
+  ApiTrpcSplatServerRoute: typeof ApiTrpcSplatServerRoute
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteImport
-      parentRoute: typeof rootRoute
-    }
     '/_main': {
       id: '/_main'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof MainRouteImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_auth/login': {
-      id: '/_auth/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof AuthLoginImport
-      parentRoute: typeof AuthRouteImport
-    }
-    '/_auth/register': {
-      id: '/_auth/register'
-      path: '/register'
-      fullPath: '/register'
-      preLoaderRoute: typeof AuthRegisterImport
-      parentRoute: typeof AuthRouteImport
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_main/': {
       id: '/_main/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof MainIndexImport
-      parentRoute: typeof MainRouteImport
+      preLoaderRoute: typeof MainIndexRouteImport
+      parentRoute: typeof MainRouteRoute
     }
-    '/_main/places/$id': {
-      id: '/_main/places/$id'
-      path: '/places/$id'
-      fullPath: '/places/$id'
-      preLoaderRoute: typeof MainPlacesIdImport
-      parentRoute: typeof MainRouteImport
+    '/_auth/register': {
+      id: '/_auth/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/_main/places/': {
       id: '/_main/places/'
       path: '/places'
       fullPath: '/places'
-      preLoaderRoute: typeof MainPlacesIndexImport
-      parentRoute: typeof MainRouteImport
+      preLoaderRoute: typeof MainPlacesIndexRouteImport
+      parentRoute: typeof MainRouteRoute
+    }
+    '/_main/places/$id': {
+      id: '/_main/places/$id'
+      path: '/places/$id'
+      fullPath: '/places/$id'
+      preLoaderRoute: typeof MainPlacesIdRouteImport
+      parentRoute: typeof MainRouteRoute
     }
   }
 }
-
-// Create and export the route tree
+declare module '@tanstack/react-start/server' {
+  interface ServerFileRoutesByPath {
+    '/api/trpc/$': {
+      id: '/api/trpc/$'
+      path: '/api/trpc/$'
+      fullPath: '/api/trpc/$'
+      preLoaderRoute: typeof ApiTrpcSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+  }
+}
 
 interface AuthRouteRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
@@ -149,111 +239,17 @@ const MainRouteRouteWithChildren = MainRouteRoute._addFileChildren(
   MainRouteRouteChildren,
 )
 
-export interface FileRoutesByFullPath {
-  '': typeof MainRouteRouteWithChildren
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/': typeof MainIndexRoute
-  '/places/$id': typeof MainPlacesIdRoute
-  '/places': typeof MainPlacesIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '': typeof AuthRouteRouteWithChildren
-  '/login': typeof AuthLoginRoute
-  '/register': typeof AuthRegisterRoute
-  '/': typeof MainIndexRoute
-  '/places/$id': typeof MainPlacesIdRoute
-  '/places': typeof MainPlacesIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/_auth': typeof AuthRouteRouteWithChildren
-  '/_main': typeof MainRouteRouteWithChildren
-  '/_auth/login': typeof AuthLoginRoute
-  '/_auth/register': typeof AuthRegisterRoute
-  '/_main/': typeof MainIndexRoute
-  '/_main/places/$id': typeof MainPlacesIdRoute
-  '/_main/places/': typeof MainPlacesIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/login' | '/register' | '/' | '/places/$id' | '/places'
-  fileRoutesByTo: FileRoutesByTo
-  to: '' | '/login' | '/register' | '/' | '/places/$id' | '/places'
-  id:
-    | '__root__'
-    | '/_auth'
-    | '/_main'
-    | '/_auth/login'
-    | '/_auth/register'
-    | '/_main/'
-    | '/_main/places/$id'
-    | '/_main/places/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  MainRouteRoute: typeof MainRouteRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   AuthRouteRoute: AuthRouteRouteWithChildren,
   MainRouteRoute: MainRouteRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/_auth",
-        "/_main"
-      ]
-    },
-    "/_auth": {
-      "filePath": "_auth/route.tsx",
-      "children": [
-        "/_auth/login",
-        "/_auth/register"
-      ]
-    },
-    "/_main": {
-      "filePath": "_main/route.tsx",
-      "children": [
-        "/_main/",
-        "/_main/places/$id",
-        "/_main/places/"
-      ]
-    },
-    "/_auth/login": {
-      "filePath": "_auth/login.tsx",
-      "parent": "/_auth"
-    },
-    "/_auth/register": {
-      "filePath": "_auth/register.tsx",
-      "parent": "/_auth"
-    },
-    "/_main/": {
-      "filePath": "_main/index.tsx",
-      "parent": "/_main"
-    },
-    "/_main/places/$id": {
-      "filePath": "_main/places.$id.tsx",
-      "parent": "/_main"
-    },
-    "/_main/places/": {
-      "filePath": "_main/places.index.tsx",
-      "parent": "/_main"
-    }
-  }
+const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
+  ApiTrpcSplatServerRoute: ApiTrpcSplatServerRoute,
 }
-ROUTE_MANIFEST_END */
+export const serverRouteTree = rootServerRouteImport
+  ._addFileChildren(rootServerRouteChildren)
+  ._addFileTypes<FileServerRouteTypes>()
