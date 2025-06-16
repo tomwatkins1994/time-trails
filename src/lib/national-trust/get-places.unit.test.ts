@@ -1,14 +1,17 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
-import { nationalTrustMockServer } from "../../../test/mocks/national-trust/server";
+import {
+	startNationalTrustMockServer,
+	stopNationalTrustMockServer,
+} from "test/mocks/national-trust/server";
 
 describe("getPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen();
+		startNationalTrustMockServer();
 	});
 
 	afterAll(() => {
-		nationalTrustMockServer.close();
+		stopNationalTrustMockServer();
 	});
 
 	it("should fetch places data", async () => {

@@ -1,16 +1,19 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { upsertPlaces } from "./upsert-places";
-import { nationalTrustMockServer } from "test/mocks/national-trust/server";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+import {
+	startNationalTrustMockServer,
+	stopNationalTrustMockServer,
+} from "../../../test/mocks/national-trust/server";
 
 describe("upsertPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen();
+		startNationalTrustMockServer();
 	});
 
 	afterAll(() => {
-		nationalTrustMockServer.close();
+		stopNationalTrustMockServer();
 	});
 
 	it("Should get places data and add it to the database", async () => {

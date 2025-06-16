@@ -1,14 +1,17 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
-import { englishHeritageMockServer } from "test/mocks/english-heritage/server";
+import {
+	startEnglishHeritageMockServer,
+	stopEnglishHeritageMockServer,
+} from "test/mocks/english-heritage/server";
 
 describe("getPlaces", () => {
 	beforeAll(() => {
-		englishHeritageMockServer.listen();
+		startEnglishHeritageMockServer();
 	});
 
 	afterAll(() => {
-		englishHeritageMockServer.close();
+		stopEnglishHeritageMockServer();
 	});
 
 	it("should fetch places data", async () => {
