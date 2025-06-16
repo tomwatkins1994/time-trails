@@ -12,6 +12,22 @@ export default defineConfig({
 		tanstackStart(),
 	],
 	test: {
-		setupFiles: ["./test/setup-test-db.ts"],
+		projects: [
+			{
+				extends: true,
+				test: {
+					name: "unit",
+					include: ["**/*.unit.test.ts"],
+				},
+			},
+			{
+				extends: true,
+				test: {
+					name: "integration",
+					include: ["**/*.integration.test.ts"],
+					setupFiles: ["./test/setup-test-db.ts"],
+				},
+			},
+		],
 	},
 });
