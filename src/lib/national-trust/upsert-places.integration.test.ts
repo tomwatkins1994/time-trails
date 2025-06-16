@@ -3,10 +3,15 @@ import { upsertPlaces } from "./upsert-places";
 import { nationalTrustMockServer } from "test/mocks/national-trust/server";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+import { NT_BASE_URL } from "./constants";
 
 describe("upsertPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen();
+		nationalTrustMockServer.listen({
+			onUnhandledRequest: ({ url }) => {
+				if (!url.startsWith(NT_BASE_URL)) return;
+			},
+		});
 	});
 
 	afterAll(() => {

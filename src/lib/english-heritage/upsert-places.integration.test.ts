@@ -3,10 +3,15 @@ import { upsertPlaces } from "./upsert-places";
 import { db } from "@/db";
 import { places } from "@/db/schema";
 import { englishHeritageMockServer } from "test/mocks/english-heritage/server";
+import { EH_BASE_URL } from "./constants";
 
 describe("upsertPlaces", () => {
 	beforeAll(() => {
-		englishHeritageMockServer.listen();
+		englishHeritageMockServer.listen({
+			onUnhandledRequest: ({ url }) => {
+				if (!url.startsWith(EH_BASE_URL)) return;
+			},
+		});
 	});
 
 	afterAll(() => {

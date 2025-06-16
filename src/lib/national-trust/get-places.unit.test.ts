@@ -1,10 +1,15 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
 import { nationalTrustMockServer } from "../../../test/mocks/national-trust/server";
+import { NT_BASE_URL } from "./constants";
 
 describe("getPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen();
+		nationalTrustMockServer.listen({
+			onUnhandledRequest: ({ url }) => {
+				if (!url.startsWith(NT_BASE_URL)) return;
+			},
+		});
 	});
 
 	afterAll(() => {

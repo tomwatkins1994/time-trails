@@ -1,10 +1,15 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
 import { englishHeritageMockServer } from "test/mocks/english-heritage/server";
+import { EH_BASE_URL } from "./constants";
 
 describe("getPlaces", () => {
 	beforeAll(() => {
-		englishHeritageMockServer.listen();
+		englishHeritageMockServer.listen({
+			onUnhandledRequest: ({ url }) => {
+				if (!url.startsWith(EH_BASE_URL)) return;
+			},
+		});
 	});
 
 	afterAll(() => {
