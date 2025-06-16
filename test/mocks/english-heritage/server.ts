@@ -8,8 +8,9 @@ const englishHeritageMockServer = setupServer(...handlers);
 
 export const startEnglishHeritageMockServer = () =>
 	englishHeritageMockServer.listen({
-		onUnhandledRequest: ({ url }) => {
+		onUnhandledRequest: ({ url }, print) => {
 			if (!url.startsWith(EH_BASE_URL)) return;
+			print.error();
 		},
 	});
 
