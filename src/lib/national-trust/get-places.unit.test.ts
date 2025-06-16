@@ -1,19 +1,17 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { getPlaces } from "./get-places";
-import { nationalTrustMockServer } from "../../../test/mocks/national-trust/server";
-import { NT_BASE_URL } from "./constants";
+import {
+	startNationalTrustMockServer,
+	stopNationalTrustMockServer,
+} from "test/mocks/national-trust/server";
 
 describe("getPlaces", () => {
 	beforeAll(() => {
-		nationalTrustMockServer.listen({
-			onUnhandledRequest: ({ url }) => {
-				if (!url.startsWith(NT_BASE_URL)) return;
-			},
-		});
+		startNationalTrustMockServer();
 	});
 
 	afterAll(() => {
-		nationalTrustMockServer.close();
+		stopNationalTrustMockServer();
 	});
 
 	it("should fetch places data", async () => {

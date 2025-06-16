@@ -2,20 +2,18 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { upsertPlaces } from "./upsert-places";
 import { db } from "@/db";
 import { places } from "@/db/schema";
-import { englishHeritageMockServer } from "test/mocks/english-heritage/server";
-import { EH_BASE_URL } from "./constants";
+import {
+	startEnglishHeritageMockServer,
+	stopEnglishHeritageMockServer,
+} from "test/mocks/english-heritage/server";
 
 describe("upsertPlaces", () => {
 	beforeAll(() => {
-		englishHeritageMockServer.listen({
-			onUnhandledRequest: ({ url }) => {
-				if (!url.startsWith(EH_BASE_URL)) return;
-			},
-		});
+		startEnglishHeritageMockServer();
 	});
 
 	afterAll(() => {
-		englishHeritageMockServer.close();
+		stopEnglishHeritageMockServer();
 	});
 
 	it("Should get places data and add it to the database", async () => {
