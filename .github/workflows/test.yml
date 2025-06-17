@@ -10,41 +10,17 @@ jobs:
   unit:
     name: Unit tests
     runs-on: ubuntu-latest
+    uses: ./setup.yml
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm i
-
       - name: Run unit tests
         run: pnpm run test:unit
 
   integration:
     name: Integration tests  
     runs-on: ubuntu-latest
+    uses: ./setup.yml
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm i
-
       - name: Run integration tests
         run: pnpm run test:integration
