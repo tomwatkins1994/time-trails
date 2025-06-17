@@ -1,7 +1,5 @@
 name: Setup
-
-on:
-  workflow_call:
+description: Common setup for pnpm + Node
 
 runs:
   using: "composite"
@@ -18,3 +16,4 @@ runs:
 
       - name: Install dependencies
         run: pnpm i
+        shell: bash
