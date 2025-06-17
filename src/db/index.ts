@@ -5,6 +5,8 @@ import { Pool } from "pg";
 import { z } from "zod";
 import * as schema from "./schema";
 
+const isTest = process.env.NODE_ENV === "test";
+
 export interface DBOptions {
 	url: string;
 	cache: {
@@ -31,6 +33,10 @@ export function setupDb({ url, cache }: DBOptions) {
 }
 
 export const { db } = (() => {
+	if (process.env.NODE_ENV === "test") {
+		return {} as ReturnType<typeof setupDb>;
+	}
+
 	const { DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN } = z
 		.object({
 			DATABASE_URL: z.string(),
