@@ -1,5 +1,5 @@
 name: Setup
-description: Common setup for pnpm + Node
+description: Common setup for Node + pnpm
 
 runs:
   using: "composite"
