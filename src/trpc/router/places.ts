@@ -3,10 +3,7 @@ import { and, ilike, inArray, gte, sql, gt } from "drizzle-orm";
 import { db } from "../../db";
 import { publicProcedure } from "../init";
 import { places } from "@/db/schema";
-import { redis } from "@/db/redis";
-import { D } from "node_modules/@upstash/redis/zmscore-DzNHSWxc.mjs";
 import { cachedQuery } from "@/db/cached-query";
-import { Input } from "@/components/ui/input";
 
 export const placesRouter = {
 	getById: publicProcedure
