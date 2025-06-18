@@ -1,6 +1,6 @@
 import type { SetCommandOptions } from "@upstash/redis";
 import { createHash } from "node:crypto";
-import { redis } from "./redis";
+import { redis } from "@/db/redis";
 
 // biome-ignore lint/suspicious/noExplicitAny: Could be anything
 function generateCacheKey(key: string, args: any): string {

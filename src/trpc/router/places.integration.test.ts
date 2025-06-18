@@ -1,8 +1,33 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { seed } from "drizzle-seed";
+import assert from "node:assert";
 import { createCaller } from "@/trpc/router";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+import { redis } from "@/db/redis";
+
+describe("getById", () => {
+	const ctx = {};
+	const caller = createCaller(ctx);
+
+	it("should get a place by ID", async () => {
+		const insertedPlace = await db
+			.insert(places)
+			.values({
+				name: "Test place",
+				description: "Test place",
+				managedBy: "NATIONAL_TRUST",
+				managerId: "1",
+			})
+			.returning();
+		const placeId = insertedPlace[0]?.id;
+		assert(placeId);
+
+		const place = await caller.places.getById({ id: placeId });
+		expect(place).not.toBeUndefined();
+		expect(place?.id).toBe(placeId);
+	});
+});
 
 describe("infiniteList", () => {
 	const ctx = {};
@@ -12,6 +37,7 @@ describe("infiniteList", () => {
 	const limit = 10;
 
 	beforeAll(async () => {
+		await db.delete(places);
 		await seed(db, { places }, { count: pages * limit });
 	});
 
@@ -40,5 +66,56 @@ describe("infiniteList", () => {
 			}
 			cursor = nextCursor;
 		}
+	});
+});
+
+describe("getRandomImages", () => {
+	const ctx = {};
+	const caller = createCaller(ctx);
+
+	const numberOfImages = 4;
+
+	beforeEach(async () => {
+		await db.delete(places);
+		await redis.flushall();
+
+		await seed(db, { places }, { count: 100 });
+	});
+
+	it("should get the amount images requested", async () => {
+		const images = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images).toHaveLength(numberOfImages);
+	});
+
+	it("should get no images if there are none with image URLs", async () => {
+		await db.update(places).set({ imageUrl: null });
+
+		const images = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images).toHaveLength(0);
+	});
+
+	it("should get the same images requested due to caching", async () => {
+		const images1 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		const images2 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images1).toEqual(images2);
+	});
+
+	it("should get different images when cache is cleared", async () => {
+		const images1 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		await redis.flushall();
+		const images2 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images1).not.toEqual(images2);
 	});
 });
