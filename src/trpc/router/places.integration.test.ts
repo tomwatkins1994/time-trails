@@ -1,8 +1,32 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { seed } from "drizzle-seed";
+import assert from "node:assert";
 import { createCaller } from "@/trpc/router";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+
+describe("getById", () => {
+	const ctx = {};
+	const caller = createCaller(ctx);
+
+	it("should get a place by ID", async () => {
+		const insertedPlace = await db
+			.insert(places)
+			.values({
+				name: "Test place",
+				description: "Test place",
+				managedBy: "NATIONAL_TRUST",
+				managerId: "1",
+			})
+			.returning();
+		const placeId = insertedPlace[0]?.id;
+		assert(placeId);
+
+		const place = await caller.places.getById({ id: placeId });
+		expect(place).not.toBeUndefined();
+		expect(place?.id).toBe(placeId);
+	});
+});
 
 describe("infiniteList", () => {
 	const ctx = {};
@@ -12,6 +36,7 @@ describe("infiniteList", () => {
 	const limit = 10;
 
 	beforeAll(async () => {
+		await db.delete(places);
 		await seed(db, { places }, { count: pages * limit });
 	});
 
