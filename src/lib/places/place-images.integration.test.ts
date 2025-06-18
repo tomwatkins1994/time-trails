@@ -24,7 +24,7 @@ describe("Blurhashes", () => {
 		],
 	);
 
-	beforeAll(() => mockServer.listen());
+	beforeAll(() => mockServer.listen({ onUnhandledRequest: "bypass" }));
 
 	afterAll(() => mockServer.close());
 
