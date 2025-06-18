@@ -98,10 +98,24 @@ describe("getRandomImages", () => {
 		expect(images).toHaveLength(0);
 	});
 
-	// it("should get the same images requested due to caching", async () => {
-	// 	const images = await caller.places.getRandomImages({
-	// 		number: numberOfImages,
-	// 	});
-	// 	expect(images).toHaveLength(numberOfImages);
-	// });
+	it("should get the same images requested due to caching", async () => {
+		const images1 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		const images2 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images1).toEqual(images2);
+	});
+
+	it("should get different images when cache is cleared", async () => {
+		const images1 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		await redis.flushall();
+		const images2 = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images1).not.toEqual(images2);
+	});
 });
