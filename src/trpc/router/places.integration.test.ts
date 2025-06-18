@@ -1,9 +1,10 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { seed } from "drizzle-seed";
 import assert from "node:assert";
 import { createCaller } from "@/trpc/router";
 import { db } from "@/db";
 import { places } from "@/db/schema";
+import { redis } from "@/db/redis";
 
 describe("getById", () => {
 	const ctx = {};
@@ -66,4 +67,41 @@ describe("infiniteList", () => {
 			cursor = nextCursor;
 		}
 	});
+});
+
+describe("getRandomImages", () => {
+	const ctx = {};
+	const caller = createCaller(ctx);
+
+	const numberOfImages = 4;
+
+	beforeEach(async () => {
+		await db.delete(places);
+		await redis.flushall();
+
+		await seed(db, { places }, { count: 100 });
+	});
+
+	it("should get the amount images requested", async () => {
+		const images = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images).toHaveLength(numberOfImages);
+	});
+
+	it("should get no images if there are none with image URLs", async () => {
+		await db.update(places).set({ imageUrl: null });
+
+		const images = await caller.places.getRandomImages({
+			number: numberOfImages,
+		});
+		expect(images).toHaveLength(0);
+	});
+
+	// it("should get the same images requested due to caching", async () => {
+	// 	const images = await caller.places.getRandomImages({
+	// 		number: numberOfImages,
+	// 	});
+	// 	expect(images).toHaveLength(numberOfImages);
+	// });
 });
